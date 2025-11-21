@@ -324,7 +324,7 @@ body {
 }
 
 .start-text {
-    color: #ffff00;
+    color: #ffde21;
     font-size: 16px;
     margin-bottom: 20px;
 }
@@ -337,7 +337,7 @@ body {
     display: flex;
     justify-content: space-between;
     font-size: 8px;
-    color: #666;
+    color: #000000;
 }
 
 .battery {
