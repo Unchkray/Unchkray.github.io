@@ -60,14 +60,14 @@ body {
 /* Loading Screen Styles */
 #loading-screen {
     background: #000;
-    color: #00ff00;
+    color: #0096ff;
 }
 
 #loading-screen .gameboy-screen {
     width: 600px;
     height: 400px;
     background: #000;
-    border: 4px solid #00ff00;
+    border: 4px solid #0096ff;
     border-radius: 10px;
     display: flex;
     justify-content: center;
@@ -84,7 +84,7 @@ body {
 #loading-screen .title {
     font-size: 48px;
     font-weight: bold;
-    color: #00ff00;
+    color: #0096ff;
     margin-bottom: 40px;
     letter-spacing: 4px;
     animation: titleGlow 2s ease-in-out infinite alternate; /* Tambahkan ini */
@@ -93,16 +93,16 @@ body {
 /* Tambahkan keyframe ini */
 @keyframes titleGlow {
     from {
-        text-shadow: 0 0 10px #00ff00;
+        text-shadow: 0 0 10px #0096ff;
     }
     to {
-        text-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00;
+        text-shadow: 0 0 20px #0096ff, 0 0 30px #0096ff;
     }
 }
 
 #loading-screen .loading-text {
     font-size: 24px;
-    color: #00ff00;
+    color: #0096ff;
     margin-bottom: 30px;
     text-align: left;
     padding-left: 20px;
@@ -114,7 +114,7 @@ body {
     width: 80%;
     height: 30px;
     background: #333;
-    border: 2px solid #00ff00;
+    border: 2px solid #0096ff;
     margin: 0 auto 30px;
     position: relative;
     border-radius: 5px;
@@ -123,7 +123,7 @@ body {
 
 .progress-fill {
     height: 100%;
-    background: #00ff00;
+    background: #0096ff;
     width: 38%;
     transition: width 0.3s ease;
     position: relative;
@@ -248,7 +248,7 @@ body {
 .gameboy-screen {
     width: 100%;
     height: 200px;
-    background: #2d5016;
+    background: #6baed6;
     border: 8px solid #1a1a1a;
     border-radius: 8px;
     margin-bottom: 20px;
