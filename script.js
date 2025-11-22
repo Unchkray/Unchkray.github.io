@@ -2,8 +2,10 @@
 let currentApp = null;
 let tetrisGame = null;
 let typingInterval = null;
+let currentPhotoIndex = 0; // Untuk melacak urutan foto
 
 // --- Setup Data Foto ---
+// NOTE: Pastikan file di folder 'images' bernama persis: photo1.jpg, photo2.jpg ... photo8.jpg
 const photos = [
     { text: 'Cantik yang Gak Pernah Gagal 💕', image: './images/photo1.jpg' },
     { text: 'Imutnya Bikin Lupa Dunia 🧸', image: './images/photo2.jpg' },
@@ -11,7 +13,7 @@ const photos = [
     { text: 'Senyum yang Jadi Favorit Aku ❤️', image: './images/photo4.jpg' },
     { text: 'Pesona yang Susah Dilupain 🌹', image: './images/photo5.jpg' },
     { text: 'Cantik dari Sudut Mana Pun 📸', image: './images/photo6.jpg' },
-    { text: 'Manis Bikin Diabetes 🍯', image: './images/photo7.jpg' },
+    { text: 'Manis yang Bikin Diabetes 🍯', image: './images/photo7.jpg' },
     { text: 'Yang Aku Sayang Selamanya 💖', image: './images/photo8.jpg' }
 ];
 
@@ -55,7 +57,7 @@ function openApp(appName) {
         currentApp = appName;
         
         if (appName === 'tetris') initTetris();
-        if (appName === 'camera') resetCamera();
+        if (appName === 'camera') initCamera();
     }
 }
 
@@ -133,63 +135,85 @@ function startChatTypewriter() {
     typeNextParagraph();
 }
 
-// --- Camera Logic ---
-function resetCamera() {
-    const display = document.querySelector('.photo-display');
-    display.innerHTML = '<div style="color:white; text-align:center; margin-top:100px;">Tap Shutter Button</div>';
+// --- CAMERA LOGIC (Revised) ---
+function initCamera() {
+    // Reset Tampilan ke Awal
+    const container = document.querySelector('.photo-stack-container');
+    container.innerHTML = '<div class="initial-text">Tap Shutter to Capture</div>';
+    
     const btn = document.getElementById('shutter-trigger');
-    btn.onclick = startPhotoSequence;
+    btn.onclick = captureOnePhoto; 
+    
+    // Pastikan view mode yang aktif adalah kamera
+    closeGalleryView();
 }
 
-function startPhotoSequence() {
-    const display = document.querySelector('.photo-display');
-    const btn = document.getElementById('shutter-trigger');
-    btn.onclick = null; 
-    display.innerHTML = ''; 
-    
-    // Flash Effect
-    const flash = document.createElement('div');
-    flash.style.position = 'absolute';
-    flash.style.top = '0'; flash.style.left = '0';
-    flash.style.width = '100%'; flash.style.height = '100%';
-    flash.style.background = 'white';
-    flash.style.zIndex = '100';
-    flash.style.transition = 'opacity 0.2s';
-    document.querySelector('.camera-viewport').appendChild(flash);
-    
-    let photoIndex = 0;
-
-    function captureNext() {
-        if (photoIndex >= photos.length) {
-            const doneText = document.createElement('div');
-            doneText.style.color = 'white';
-            doneText.style.textAlign = 'center';
-            doneText.style.marginTop = '20px';
-            doneText.innerHTML = 'Happy Birthday Mika! 🎂';
-            display.appendChild(doneText);
-            btn.onclick = resetCamera;
-            return;
-        }
-        
-        flash.style.opacity = '1';
-        setTimeout(() => flash.style.opacity = '0', 100);
-        
-        const data = photos[photoIndex];
-        const wrapper = document.createElement('div');
-        wrapper.className = 'photo-frame';
-        wrapper.innerHTML = `
-            <img src="${data.image}" onerror="this.src='https://via.placeholder.com/300x400/ccc/333?text=No+Image'">
-            <div class="photo-overlay-text">${data.text}</div>
-        `;
-        
-        display.appendChild(wrapper);
-        display.scrollTop = display.scrollHeight;
-        
-        photoIndex++;
-        setTimeout(captureNext, 1500);
+function captureOnePhoto() {
+    // Cek apakah foto sudah habis
+    if (currentPhotoIndex >= photos.length) {
+        const container = document.querySelector('.photo-stack-container');
+        const doneMsg = document.createElement('div');
+        doneMsg.style.textAlign = 'center';
+        doneMsg.style.color = 'white';
+        doneMsg.style.marginTop = '20px';
+        doneMsg.innerHTML = '<b>All Captured! Check Gallery 👈</b>';
+        container.appendChild(doneMsg);
+        container.scrollTop = container.scrollHeight;
+        return;
     }
+
+    // Efek Flash
+    const flash = document.getElementById('camera-flash');
+    flash.style.opacity = '1';
+    setTimeout(() => { flash.style.opacity = '0'; }, 150);
+
+    // Ambil data foto
+    const data = photos[currentPhotoIndex];
     
-    captureNext();
+    // 1. Tampilkan di Layar Kamera (Stack)
+    const container = document.querySelector('.photo-stack-container');
+    // Hapus teks instruksi jika ada
+    if(container.querySelector('.initial-text')) {
+        container.innerHTML = '';
+    }
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'photo-frame';
+    wrapper.innerHTML = `
+        <img src="${data.image}" onerror="this.src='https://via.placeholder.com/300x400/ccc/333?text=Image+Error'">
+        <div class="photo-overlay-text">${data.text}</div>
+    `;
+    container.appendChild(wrapper);
+    container.scrollTop = container.scrollHeight;
+
+    // 2. Simpan ke Gallery Grid
+    addToGallery(data);
+
+    // 3. Update Thumbnail Kecil
+    const thumb = document.getElementById('gallery-thumb');
+    thumb.src = data.image;
+    thumb.style.opacity = '1';
+
+    // Lanjut ke foto berikutnya
+    currentPhotoIndex++;
+}
+
+function addToGallery(photoData) {
+    const grid = document.getElementById('gallery-grid-content');
+    const item = document.createElement('div');
+    item.className = 'gallery-item';
+    item.innerHTML = `<img src="${photoData.image}" loading="lazy">`;
+    grid.appendChild(item);
+}
+
+function openGalleryView() {
+    document.getElementById('camera-view-mode').style.display = 'none';
+    document.getElementById('gallery-view-mode').classList.add('active');
+}
+
+function closeGalleryView() {
+    document.getElementById('gallery-view-mode').classList.remove('active');
+    document.getElementById('camera-view-mode').style.display = 'flex';
 }
 
 // --- Spotify Logic ---
