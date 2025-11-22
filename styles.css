@@ -205,10 +205,10 @@ body {
 }
 
 /* Main Gameboy Styles */
-.gameboy-body {
+/* .gameboy-body {
     width: 400px;
     height: 600px;
-    background: linear-gradient(145deg, #e8e8e8, #d0d0d0);
+    background: linear-gradient(145deg, #CCAD60, #d0d0d0);
     border-radius: 20px 20px 40px 40px;
     padding: 20px;
     box-shadow: 
@@ -216,6 +216,22 @@ body {
         inset 0 2px 4px rgba(255,255,255,0.8),
         inset 0 -2px 4px rgba(0,0,0,0.2);
     position: relative;
+} */
+
+/* iPhone 16 Pro Max - Titanium Desert style */
+.gameboy-body {
+    width: 420px;            /* lebih besar untuk "Pro Max" */
+    height: 880px;
+    background: linear-gradient(180deg, #d8c3a5 0%, #c9a86f 40%, #b7894a 100%); /* titanium desert */
+    border-radius: 48px;     /* rounded like iPhone */
+    padding: 18px;
+    box-shadow:
+        0 30px 80px rgba(2,12,30,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.45),
+        inset 0 -2px 6px rgba(0,0,0,0.12);
+    border: 1px solid rgba(255,255,255,0.12); /* slim metal border */
+    position: relative;
+    overflow: hidden;
 }
 
 .gameboy-header {
