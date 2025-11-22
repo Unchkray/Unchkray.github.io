@@ -18,17 +18,11 @@
             <div class="side-btn action-btn-hw"></div>
 
             <div class="screen-content-wrapper">
-                <div class="dynamic-island">
-                    <div class="camera-hole"></div>
-                </div>
+                <div class="dynamic-island"><div class="camera-hole"></div></div>
 
                 <div class="status-bar">
                     <div class="time" id="clock">09:41</div>
-                    <div class="status-icons">
-                        <i class="fas fa-signal"></i>
-                        <i class="fas fa-wifi"></i>
-                        <i class="fas fa-battery-full"></i>
-                    </div>
+                    <div class="status-icons"><i class="fas fa-signal"></i><i class="fas fa-wifi"></i><i class="fas fa-battery-full"></i></div>
                 </div>
 
                 <div id="loading-screen" class="app-screen active">
@@ -40,48 +34,25 @@
                     <div class="wallpaper"></div>
                     <div class="home-content">
                         <div class="widgets">
-                            <div class="widget calendar-widget">
-                                <div class="day">SAT</div><div class="date">22</div>
-                            </div>
-                            <div class="widget weather-widget">
-                                <i class="fas fa-cloud-sun"></i><span>26°C</span><span>Bandung</span>
-                            </div>
+                            <div class="widget calendar-widget"><div class="day">SAT</div><div class="date">22</div></div>
+                            <div class="widget weather-widget"><i class="fas fa-cloud-sun"></i><span>26°C</span><span>Bandung</span></div>
                         </div>
                         <div class="app-grid">
-                            <div class="app-item" onclick="openApp('whatsapp')">
-                                <div class="app-icon whatsapp-icon"><i class="fab fa-whatsapp"></i><div class="notification-badge">1</div></div>
-                                <span class="app-name">WhatsApp</span>
-                            </div>
-                            <div class="app-item" onclick="openApp('camera')">
-                                <div class="app-icon camera-icon"><i class="fas fa-camera"></i></div>
-                                <span class="app-name">Camera</span>
-                            </div>
-                            <div class="app-item" onclick="openApp('spotify')">
-                                <div class="app-icon spotify-icon"><i class="fab fa-spotify"></i></div>
-                                <span class="app-name">Spotify</span>
-                            </div>
-                            <div class="app-item" onclick="openApp('tetris')">
-                                <div class="app-icon game-icon"><i class="fas fa-gamepad"></i></div>
-                                <span class="app-name">Tetris</span>
-                            </div>
+                            <div class="app-item" onclick="openApp('whatsapp')"><div class="app-icon whatsapp-icon"><i class="fab fa-whatsapp"></i><div class="notification-badge">4</div></div><span class="app-name">WhatsApp</span></div>
+                            <div class="app-item" onclick="openApp('camera')"><div class="app-icon camera-icon"><i class="fas fa-camera"></i></div><span class="app-name">Camera</span></div>
+                            <div class="app-item" onclick="openApp('spotify')"><div class="app-icon spotify-icon"><i class="fab fa-spotify"></i></div><span class="app-name">Spotify</span></div>
+                            <div class="app-item" onclick="openApp('tetris')"><div class="app-icon game-icon"><i class="fas fa-gamepad"></i></div><span class="app-name">Tetris</span></div>
                         </div>
                         <div class="dock-container">
                             <div class="dock-blur"></div>
-                            <div class="dock-apps">
-                                <div class="app-icon phone-icon"><i class="fas fa-phone"></i></div>
-                                <div class="app-icon safari-icon"><i class="fab fa-safari"></i></div>
-                                <div class="app-icon message-icon"><i class="fas fa-comment"></i></div>
-                                <div class="app-icon music-icon"><i class="fas fa-music"></i></div>
-                            </div>
+                            <div class="dock-apps"><div class="app-icon phone-icon"><i class="fas fa-phone"></i></div><div class="app-icon safari-icon"><i class="fab fa-safari"></i></div><div class="app-icon message-icon"><i class="fas fa-comment"></i></div><div class="app-icon music-icon"><i class="fas fa-music"></i></div></div>
                         </div>
                     </div>
                 </div>
 
                 <div id="whatsapp-app" class="app-screen">
                     <div id="wa-list-view" class="wa-view active">
-                        <div class="wa-header">
-                            <span style="color:#007AFF">Edit</span><span class="wa-title">Chats</span><i class="far fa-edit" style="color:#007AFF"></i>
-                        </div>
+                        <div class="wa-header"><span style="color:#007AFF">Edit</span><span class="wa-title">Chats</span><i class="far fa-edit" style="color:#007AFF"></i></div>
                         <div class="wa-search-bar"><i class="fas fa-search"></i> Search</div>
                         <div class="wa-chat-list">
                             <div class="wa-chat-item" onclick="openChatRoom()">
@@ -92,18 +63,15 @@
                                 </div>
                                 <div class="wa-info-right">
                                     <span class="wa-time">Now</span>
-                                    <div class="wa-badge-blue">1</div>
+                                    <div class="wa-badge-blue">4</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div id="wa-chat-view" class="wa-view">
                         <div class="wa-chat-header">
-                            <div class="back-chevron" onclick="closeChatRoom()"><i class="fas fa-chevron-left"></i> 9+</div>
-                            <div style="flex:1; margin-left:10px;">
-                                <div style="font-weight:bold; font-size:14px;">Unchkray ❤️</div>
-                                <div style="font-size:10px; color:#888;">online</div>
-                            </div>
+                            <div class="back-chevron" onclick="closeChatRoom()"><i class="fas fa-chevron-left"></i> 4</div>
+                            <div style="flex:1; margin-left:10px;"><div style="font-weight:bold; font-size:14px;">Unchkray ❤️</div><div style="font-size:10px; color:#888;">online</div></div>
                             <div style="color:#007AFF; display:flex; gap:15px; font-size:18px;"><i class="fas fa-video"></i><i class="fas fa-phone"></i></div>
                         </div>
                         <div class="wa-messages-container"></div>
@@ -113,24 +81,20 @@
 
                 <div id="camera-app" class="app-screen">
                     <div class="camera-interface" id="camera-view-mode">
-                        <div class="camera-top-controls">
-                            <i class="fas fa-bolt"></i><i class="fas fa-chevron-up"></i><i class="fas fa-circle-notch"></i>
-                        </div>
+                        <div class="camera-top-controls"><i class="fas fa-bolt"></i><i class="fas fa-chevron-up"></i><i class="fas fa-circle-notch"></i></div>
                         
                         <div class="camera-viewport">
                             <div id="camera-flash" class="camera-flash"></div>
-                            <div class="photo-stack-container">
+                            <div id="camera-main-display" class="camera-main-display">
                                 <div class="initial-text">Tap Shutter to Capture</div>
                             </div>
                         </div>
 
                         <div class="camera-bottom-controls">
-                            <div class="camera-modes">
-                                <span>VIDEO</span><span style="color:#ffd700">PHOTO</span><span>PORTRAIT</span>
-                            </div>
+                            <div class="camera-modes"><span>VIDEO</span><span style="color:#ffd700">PHOTO</span><span>PORTRAIT</span></div>
                             <div class="shutter-area">
-                                <div class="gallery-preview-btn" onclick="openGalleryView()">
-                                    <img id="gallery-thumb" src="https://via.placeholder.com/50/333/333" style="opacity:0.3;">
+                                <div class="gallery-preview-btn" onclick="openGalleryOverlay()">
+                                    <img id="gallery-thumb" src="" style="opacity:0;">
                                 </div>
                                 <div class="shutter-btn" id="shutter-trigger" onclick="takePhoto()">
                                     <div class="shutter-inner"></div>
@@ -140,18 +104,9 @@
                         </div>
                     </div>
 
-                    <div class="gallery-interface" id="gallery-view-mode">
-                        <div class="gallery-header">
-                            <div class="gallery-back-btn" onclick="closeGalleryView()"><i class="fas fa-chevron-left"></i> Camera</div>
-                            <div class="gallery-title">Recents</div>
-                            <div class="gallery-select-btn">Select</div>
-                        </div>
-                        <div class="gallery-grid" id="gallery-grid-content"></div>
-                    </div>
-                    
                     <div id="gallery-overlay" class="gallery-overlay">
                         <div class="gallery-navbar">
-                            <div class="back-text" onclick="closeFullGallery()"><i class="fas fa-chevron-left"></i> Back</div>
+                            <div class="back-text" onclick="closeGalleryOverlay()"><i class="fas fa-chevron-left"></i> Camera</div>
                             <div class="gallery-date">Today</div>
                             <div class="gallery-action">Edit</div>
                         </div>
@@ -175,24 +130,16 @@
                             <span class="lib-title">Your Library</span>
                             <div class="lib-icons"><i class="fas fa-search"></i><i class="fas fa-plus"></i></div>
                         </div>
-                        <div class="filter-pills">
-                            <span>Playlists</span><span>Albums</span><span>Artists</span>
-                        </div>
-                        <div class="spotify-list-container" id="spotify-playlist-list">
-                            </div>
+                        <div class="filter-pills"><span>Playlists</span><span>Albums</span><span>Artists</span></div>
+                        <div class="spotify-list-container" id="spotify-playlist-list"></div>
                         <div class="spotify-now-playing-bar" onclick="togglePlay()">
-                            <div class="np-info">
-                                <div class="np-title" id="np-title-mini">Not Playing</div>
-                                <div class="np-artist" id="np-artist-mini">Select a playlist</div>
-                            </div>
+                            <div class="np-info"><div class="np-title" id="np-title-mini">Not Playing</div><div class="np-artist" id="np-artist-mini">Select a playlist</div></div>
                             <div class="np-controls"><i class="fas fa-play" id="np-play-btn-mini"></i></div>
                         </div>
                     </div>
 
                     <div id="spotify-playlist-view" class="spotify-view">
-                        <div class="playlist-back-header">
-                            <i class="fas fa-arrow-left" onclick="closePlaylist()"></i>
-                        </div>
+                        <div class="playlist-back-header"><i class="fas fa-arrow-left" onclick="closePlaylist()"></i></div>
                         <div class="playlist-cover-area">
                             <div class="big-cover-art" id="pl-cover-art"></div>
                             <h1 id="pl-title">Playlist Name</h1>
@@ -208,9 +155,7 @@
 
                 <div id="tetris-app" class="app-screen">
                     <div class="tetris-overlay-header"><span class="score-pill">Score: <b id="score">0</b></span></div>
-                    <div class="tetris-game-container">
-                        <canvas id="tetris-canvas" width="300" height="600"></canvas>
-                    </div>
+                    <div class="tetris-game-container"><canvas id="tetris-canvas"></canvas></div>
                     <div class="tetris-touch-controls">
                         <div class="dpad-area">
                             <button class="t-btn t-left" id="left-btn"><i class="fas fa-chevron-left"></i></button>
@@ -234,10 +179,7 @@
                     <div class="ios-alert">
                         <h3>INGET YAA! ❤️</h3>
                         <div style="text-align: left; padding: 0 20px 20px;">
-                            <p>walaupun kamu kalah,</p>
-                            <p>tapi kamu selalu menang</p>
-                            <p>kok di hati aku, HEHE</p>
-                            <p>^_^</p>
+                            <p>walaupun kamu kalah,</p><p>tapi kamu selalu menang</p><p>kok di hati aku, HEHE</p><p>^_^</p>
                             <p style="margin-top:10px; color:#FF2D55; font-weight:bold; text-align:center;">I LOVE YOU ❤️</p>
                         </div>
                         <div class="ios-alert-btns"><button onclick="closeModal('final-message-modal'); goHome()">Love You Too</button></div>
