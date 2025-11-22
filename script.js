@@ -57,11 +57,35 @@ let currentPlaylist = [];
 let currentSongIndex = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
-    simulateBoot();
+    // Jangan jalankan simulateBoot() di sini.
+    // Kita tunggu user buka kado dulu.
     updateClock();
     setInterval(updateClock, 60000);
     renderLibrary(); 
 });
+
+// Fungsi Membuka Kado
+window.openGift = function() {
+    const box = document.querySelector('.gift-box-container');
+    const screen = document.getElementById('gift-intro');
+    
+    // 1. Animasi Buka Tutup Kado
+    box.classList.add('open');
+    
+    // 2. Hapus Tulisan
+    document.querySelector('.gift-text-group').style.opacity = '0';
+    
+    // 3. Setelah animasi kado selesai, hilangkan layar kado & mulai boot HP
+    setTimeout(() => {
+        screen.classList.add('fade-out');
+        
+        setTimeout(() => {
+            screen.style.display = 'none'; // Hapus dari layar sepenuhnya
+            simulateBoot(); // <--- BARU MULAI LOADING HP DI SINI
+        }, 800);
+        
+    }, 600);
+};
 
 function updateClock() {
     const now = new Date();
@@ -440,147 +464,3 @@ function lock(){
 document.getElementById('left-btn').addEventListener('click',moveLeft);document.getElementById('right-btn').addEventListener('click',moveRight);document.getElementById('down-btn').addEventListener('click',moveDown);document.getElementById('rotate-btn').addEventListener('click',rotate);
 function openModal(id){document.getElementById(id).classList.add('active')}
 function closeModal(id){document.getElementById(id).classList.remove('active')}
-
-
-/* --- GIFT OPENING SCREEN --- */
-#gift-intro {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: #1a1a1a;
-    z-index: 99999; /* Paling atas menutupi semuanya */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: opacity 0.8s ease-out;
-}
-
-.gift-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    animation: float 3s ease-in-out infinite;
-}
-
-/* Kotak Kado */
-.gift-box-container {
-    position: relative;
-    width: 150px;
-    height: 150px;
-    cursor: pointer;
-    transition: transform 0.1s;
-}
-
-.gift-box-container:active {
-    transform: scale(0.95);
-}
-
-/* Badan Kado */
-.gift-body {
-    width: 150px;
-    height: 120px;
-    background: #e74c3c; /* Warna Kotak Merah */
-    border-radius: 0 0 10px 10px;
-    position: absolute;
-    bottom: 0;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-}
-
-.gift-ribbon-body {
-    width: 30px;
-    height: 100%;
-    background: #f1c40f; /* Pita Kuning */
-    margin: 0 auto;
-}
-
-/* Tutup Kado */
-.gift-lid {
-    width: 170px;
-    height: 40px;
-    background: #c0392b; /* Merah lebih gelap */
-    border-radius: 5px;
-    position: absolute;
-    top: -10px;
-    left: -10px;
-    z-index: 2;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    transition: all 0.5s ease;
-}
-
-.gift-ribbon-lid {
-    width: 30px;
-    height: 100%;
-    background: #f1c40f;
-    margin: 0 auto;
-}
-
-.gift-bow-left, .gift-bow-right {
-    position: absolute;
-    top: -25px;
-    width: 50px;
-    height: 50px;
-    border: 5px solid #f1c40f;
-    border-radius: 50%;
-    border-bottom-color: transparent;
-    border-right-color: transparent;
-}
-
-.gift-bow-left {
-    left: 35px;
-    transform: rotate(45deg);
-}
-
-.gift-bow-right {
-    right: 35px;
-    transform: rotate(-45deg);
-}
-
-/* Teks */
-.gift-text-group {
-    margin-top: 50px;
-    text-align: center;
-    color: white;
-    font-family: 'Inter', sans-serif;
-}
-
-.gift-title {
-    font-size: 24px;
-    font-weight: bold;
-    letter-spacing: 2px;
-    margin-bottom: 10px;
-    color: #ffd700;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-}
-
-.gift-hint {
-    font-size: 14px;
-    color: #888;
-    animation: blink 1.5s infinite;
-}
-
-/* Animasi saat dibuka */
-.gift-box-container.open .gift-lid {
-    transform: translateY(-100px) rotate(-10deg);
-    opacity: 0;
-}
-
-.gift-box-container.open .gift-body {
-    transform: translateY(20px);
-    opacity: 0;
-    transition: all 0.5s ease 0.1s;
-}
-
-#gift-intro.fade-out {
-    opacity: 0;
-    pointer-events: none;
-}
-
-/* Keyframes */
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
-}
-
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-}
