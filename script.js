@@ -381,7 +381,7 @@ let dropStart=Date.now();
 function loopTetris(){
     if(!tetrisGame || !tetrisGame.running) return;
     let now=Date.now();let delta=now-dropStart;
-    let speed = Math.max(100, 1700 - (tetrisGame.level * 50));
+    let speed = Math.max(100, 1200 - (tetrisGame.level * 50));
     if(delta > speed){ moveDown(); dropStart=Date.now(); }
     drawTetris();
     requestAnimationFrame(loopTetris);
