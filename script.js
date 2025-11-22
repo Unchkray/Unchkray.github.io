@@ -100,15 +100,11 @@ function openApp(appName) {
 }
 
 function goHome() {
-    // Reset Semua Layar ke Non-Active
     document.querySelectorAll('.app-screen').forEach(screen => {
         screen.classList.remove('active');
     });
-    
-    // Paksa Tampilkan Home Screen
     document.getElementById('home-screen').classList.add('active');
 
-    // Reset Logic per App
     if (currentApp === 'whatsapp') closeChatRoom();
     if (currentApp === 'tetris') pauseTetris();
     if (currentApp === 'camera') resetCameraState();
