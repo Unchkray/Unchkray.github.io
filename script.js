@@ -83,7 +83,7 @@ function simulateBoot() {
     }, 3000);
 }
 
-// --- Navigation ---
+// --- Navigation (FIXED BLANK SCREEN) ---
 function openApp(appName) {
     const homeScreen = document.getElementById('home-screen');
     const targetApp = document.getElementById(`${appName}-app`);
@@ -93,18 +93,22 @@ function openApp(appName) {
         currentApp = appName;
         if (appName === 'tetris') {
             initTetris();
-            resetTetris(); // AUTO RESET saat masuk
+            resetTetris();
         }
         if (appName === 'camera') initCamera();
     }
 }
 
 function goHome() {
+    // Reset Semua Layar ke Non-Active
     document.querySelectorAll('.app-screen').forEach(screen => {
         screen.classList.remove('active');
     });
+    
+    // Paksa Tampilkan Home Screen
     document.getElementById('home-screen').classList.add('active');
 
+    // Reset Logic per App
     if (currentApp === 'whatsapp') closeChatRoom();
     if (currentApp === 'tetris') pauseTetris();
     if (currentApp === 'camera') resetCameraState();
@@ -158,7 +162,7 @@ function startChatTypewriter() {
     typeNextParagraph();
 }
 
-// --- CAMERA LOGIC ---
+// --- CAMERA LOGIC (FIXED) ---
 function initCamera() {
     resetCameraState();
 }
@@ -194,7 +198,6 @@ function takePhoto() {
     lastCapturedPhoto = data;
     const display = document.getElementById('camera-main-display');
     
-    // SHOW PHOTO + CAPTION IN MAIN DISPLAY
     display.innerHTML = `
         <img src="${data.image}" style="width:100%; height:100%; object-fit:cover;">
         <div class="photo-caption-overlay">${data.text}</div>
@@ -206,8 +209,8 @@ function takePhoto() {
 
     if(cameraPhotoTimeout) clearTimeout(cameraPhotoTimeout);
     cameraPhotoTimeout = setTimeout(() => {
-        display.innerHTML = ''; // Layar jadi hitam lagi
-    }, 1200); // Tampil sedikit lebih lama agar caption terbaca
+        display.innerHTML = ''; 
+    }, 1200); 
 
     currentPhotoIndex++;
 }
