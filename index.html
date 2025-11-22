@@ -32,12 +32,8 @@
                 </div>
 
                 <div id="loading-screen" class="app-screen active">
-                    <div class="apple-logo">
-                        <i class="fab fa-apple"></i>
-                    </div>
-                    <div class="loading-bar-container">
-                        <div class="loading-bar" id="progress-fill"></div>
-                    </div>
+                    <div class="apple-logo"><i class="fab fa-apple"></i></div>
+                    <div class="loading-bar-container"><div class="loading-bar" id="progress-fill"></div></div>
                 </div>
 
                 <div id="home-screen" class="app-screen">
@@ -45,47 +41,30 @@
                     <div class="home-content">
                         <div class="widgets">
                             <div class="widget calendar-widget">
-                                <div class="day">SAT</div>
-                                <div class="date">22</div>
+                                <div class="day">SAT</div><div class="date">22</div>
                             </div>
                             <div class="widget weather-widget">
-                                <i class="fas fa-cloud-sun"></i>
-                                <span>26°C</span>
-                                <span>Bandung</span>
+                                <i class="fas fa-cloud-sun"></i><span>26°C</span><span>Bandung</span>
                             </div>
                         </div>
-                        
                         <div class="app-grid">
                             <div class="app-item" onclick="openApp('whatsapp')">
-                                <div class="app-icon whatsapp-icon">
-                                    <i class="fab fa-whatsapp"></i>
-                                    <div class="notification-badge">1</div>
-                                </div>
+                                <div class="app-icon whatsapp-icon"><i class="fab fa-whatsapp"></i><div class="notification-badge">1</div></div>
                                 <span class="app-name">WhatsApp</span>
                             </div>
-                            
                             <div class="app-item" onclick="openApp('camera')">
-                                <div class="app-icon camera-icon">
-                                    <i class="fas fa-camera"></i>
-                                </div>
+                                <div class="app-icon camera-icon"><i class="fas fa-camera"></i></div>
                                 <span class="app-name">Camera</span>
                             </div>
-
                             <div class="app-item" onclick="openApp('spotify')">
-                                <div class="app-icon spotify-icon">
-                                    <i class="fab fa-spotify"></i>
-                                </div>
+                                <div class="app-icon spotify-icon"><i class="fab fa-spotify"></i></div>
                                 <span class="app-name">Spotify</span>
                             </div>
-
                             <div class="app-item" onclick="openApp('tetris')">
-                                <div class="app-icon game-icon">
-                                    <i class="fas fa-gamepad"></i>
-                                </div>
+                                <div class="app-icon game-icon"><i class="fas fa-gamepad"></i></div>
                                 <span class="app-name">Tetris</span>
                             </div>
                         </div>
-
                         <div class="dock-container">
                             <div class="dock-blur"></div>
                             <div class="dock-apps">
@@ -101,52 +80,31 @@
                 <div id="whatsapp-app" class="app-screen">
                     <div id="wa-list-view" class="wa-view active">
                         <div class="wa-header">
-                            <span style="color:#007AFF">Edit</span>
-                            <span class="wa-title">Chats</span>
-                            <i class="far fa-edit" style="color:#007AFF"></i>
+                            <span style="color:#007AFF">Edit</span><span class="wa-title">Chats</span><i class="far fa-edit" style="color:#007AFF"></i>
                         </div>
                         <div class="wa-search-bar"><i class="fas fa-search"></i> Search</div>
                         <div class="wa-chat-list">
                             <div class="wa-chat-item" onclick="openChatRoom()">
                                 <div class="wa-avatar" style="background:#FF2D55">U</div>
                                 <div class="wa-chat-info">
-                                    <div class="wa-top-row">
-                                        <span class="wa-name">Unchkray ❤️</span>
-                                        <span class="wa-time">Now</span>
-                                    </div>
-                                    <div class="wa-bottom-row">
-                                        <span class="wa-preview">Happy Birthday yang ke-26...</span>
-                                        <span style="background:#007AFF; color:white; border-radius:50%; padding:2px 6px; font-size:10px">1</span>
-                                    </div>
+                                    <div class="wa-top-row"><span class="wa-name">Unchkray ❤️</span><span class="wa-time">Now</span></div>
+                                    <div class="wa-bottom-row"><span class="wa-preview">Happy Birthday yang ke-26...</span><span class="wa-badge-blue">1</span></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <div id="wa-chat-view" class="wa-view">
                         <div class="wa-chat-header">
                             <div class="back-chevron" onclick="closeChatRoom()"><i class="fas fa-chevron-left"></i> 9+</div>
-                            <div style="flex:1; margin-left:10px;">
-                                <div style="font-weight:bold; font-size:14px;">Unchkray ❤️</div>
-                                <div style="font-size:10px; color:#888;">online</div>
-                            </div>
-                            <div style="color:#007AFF; display:flex; gap:15px; font-size:18px;">
-                                <i class="fas fa-video"></i>
-                                <i class="fas fa-phone"></i>
-                            </div>
+                            <div style="flex:1; margin-left:10px;"><div style="font-weight:bold; font-size:14px;">Unchkray ❤️</div><div style="font-size:10px; color:#888;">online</div></div>
+                            <div style="color:#007AFF; display:flex; gap:15px; font-size:18px;"><i class="fas fa-video"></i><i class="fas fa-phone"></i></div>
                         </div>
-                        <div class="wa-messages-container">
-                            </div>
-                        <div class="wa-input-area">
-                            <i class="fas fa-plus" style="color:#007AFF"></i>
-                            <div class="wa-input-field"></div>
-                            <i class="fas fa-microphone" style="color:#007AFF"></i>
-                        </div>
+                        <div class="wa-messages-container"></div>
+                        <div class="wa-input-area"><i class="fas fa-plus" style="color:#007AFF"></i><div class="wa-input-field"></div><i class="fas fa-microphone" style="color:#007AFF"></i></div>
                     </div>
                 </div>
 
                 <div id="camera-app" class="app-screen">
-                    
                     <div class="camera-interface" id="camera-view-mode">
                         <div class="camera-top-controls">
                             <i class="fas fa-bolt"></i>
@@ -163,102 +121,85 @@
 
                         <div class="camera-bottom-controls">
                             <div class="camera-modes">
-                                <span>VIDEO</span>
-                                <span style="color:#ffd700">PHOTO</span>
-                                <span>PORTRAIT</span>
+                                <span>VIDEO</span><span style="color:#ffd700">PHOTO</span><span>PORTRAIT</span>
                             </div>
                             <div class="shutter-area">
                                 <div class="gallery-preview-btn" onclick="openGalleryView()">
                                     <img id="gallery-thumb" src="https://via.placeholder.com/50/333/333" style="opacity:0.3;">
                                 </div>
-                                
-                                <div class="shutter-btn" id="shutter-trigger">
+                                <div class="shutter-btn" id="shutter-trigger" onclick="captureOnePhoto()">
                                     <div class="shutter-inner"></div>
                                 </div>
-                                
-                                <div class="camera-flip-btn">
-                                    <i class="fas fa-sync-alt"></i>
-                                </div>
+                                <div class="camera-flip-btn"><i class="fas fa-sync-alt"></i></div>
                             </div>
                         </div>
                     </div>
 
                     <div class="gallery-interface" id="gallery-view-mode">
                         <div class="gallery-header">
-                            <div class="gallery-back-btn" onclick="closeGalleryView()">
-                                <i class="fas fa-chevron-left"></i> Camera
-                            </div>
+                            <div class="gallery-back-btn" onclick="closeGalleryView()"><i class="fas fa-chevron-left"></i> Camera</div>
                             <div class="gallery-title">Recents</div>
                             <div class="gallery-select-btn">Select</div>
                         </div>
-                        <div class="gallery-grid" id="gallery-grid-content">
-                            </div>
+                        <div class="gallery-grid" id="gallery-grid-content"></div>
                     </div>
                 </div>
 
                 <div id="spotify-app" class="app-screen">
-                    <div class="spotify-header">
+                    <audio id="audio-player"></audio>
+
+                    <div class="spotify-header-playlist">
                         <i class="fas fa-chevron-down" onclick="goHome()"></i>
-                        <span>Now Playing</span>
+                        <span style="opacity:0;">.</span>
                         <i class="fas fa-ellipsis-h"></i>
                     </div>
-                    <div class="spotify-content">
-                        <div class="album-cover">
-                            <i class="fab fa-spotify"></i>
+
+                    <div class="spotify-playlist-content">
+                        <div class="playlist-hero">
+                            <div class="playlist-cover-art"><i class="fas fa-heart"></i></div>
+                            <div class="playlist-hero-info"><h1>Birthday Mix</h1><p>Spesial buat Mika ❤️</p></div>
                         </div>
-                        <div class="spotify-track-info">
-                            <h2 class="track-title">Birthday Special Mix</h2>
-                            <p class="artist-name">For Mika ❤️</p>
-                        </div>
-                        <div style="width:100%; height:4px; background:#555; border-radius:2px; margin-bottom:20px;">
-                            <div style="width:30%; height:100%; background:white; border-radius:2px;"></div>
-                        </div>
-                        <div class="spotify-controls">
-                            <i class="fas fa-random" style="font-size:18px; color:#1DB954"></i>
-                            <i class="fas fa-step-backward"></i>
-                            <div class="play-pause-btn"><i class="fas fa-play"></i></div>
-                            <i class="fas fa-step-forward"></i>
-                            <i class="fas fa-redo" style="font-size:18px"></i>
-                        </div>
-                        <div class="playlist-selector">
-                            <p style="text-align:left; margin-bottom:10px; font-weight:bold;">Select Vibe:</p>
-                            <div class="playlist-chips">
-                                <span class="chip active" data-playlist="1">Good Vibes</span>
-                                <span class="chip" data-playlist="2">Blue</span>
-                                <span class="chip" data-playlist="3">Night Chills</span>
+                        
+                        <div class="playlist-controls-row">
+                            <div class="spotify-icons-left">
+                                <i class="far fa-heart"></i><i class="fas fa-arrow-circle-down"></i><i class="fas fa-user-plus"></i>
                             </div>
+                            <div class="spotify-play-big" onclick="playSong(0)"><i class="fas fa-play"></i></div>
+                        </div>
+
+                        <div class="song-list" id="song-list-container"></div>
+                    </div>
+
+                    <div class="spotify-now-playing-bar">
+                        <div class="np-info">
+                            <div class="np-title" id="np-title">Not Playing</div>
+                            <div class="np-artist" id="np-artist">Select a song</div>
+                        </div>
+                        <div class="np-controls">
+                            <i class="fas fa-play" id="np-play-btn" onclick="togglePlay()"></i>
                         </div>
                     </div>
                 </div>
 
                 <div id="tetris-app" class="app-screen">
-                    <div class="tetris-overlay-header">
-                        <span class="score-pill">Score: <b id="score">0</b></span>
-                        <span class="level-pill">Lvl: <b id="level">1</b></span>
-                    </div>
-                    <div class="tetris-game-container">
-                        <canvas id="tetris-canvas"></canvas>
-                    </div>
+                    <div class="tetris-overlay-header"><span class="score-pill">Score: <b id="score">0</b></span><span class="level-pill">Lvl: <b id="level">1</b></span></div>
+                    <div class="tetris-game-container"><canvas id="tetris-canvas"></canvas></div>
                     <div class="tetris-touch-controls">
                         <div class="dpad-area">
                             <button class="t-btn t-left" id="left-btn"><i class="fas fa-chevron-left"></i></button>
                             <button class="t-btn t-down" id="down-btn"><i class="fas fa-chevron-down"></i></button>
                             <button class="t-btn t-right" id="right-btn"><i class="fas fa-chevron-right"></i></button>
                         </div>
-                        <div style="display:flex; align-items:flex-end;">
-                            <button class="t-rotate" id="rotate-btn"><i class="fas fa-undo"></i></button>
-                        </div>
+                        <div style="display:flex; align-items:flex-end;"><button class="t-rotate" id="rotate-btn"><i class="fas fa-undo"></i></button></div>
                     </div>
                 </div>
 
-                <div class="home-indicator-area" onclick="goHome()">
-                    <div class="home-indicator"></div>
-                </div>
+                <div class="home-indicator-area" onclick="goHome()"><div class="home-indicator"></div></div>
 
                 <div id="game-over-modal" class="ios-modal">
                     <div class="ios-alert">
-                        <h3>Game Over</h3>
-                        <p>Yah, kalah. Tapi coba lagi dong!</p>
+                        <h3>GAME OVER</h3>
+                        <p>Skor kamu: <span id="final-score">0</span></p>
                         <div class="ios-alert-btns">
                             <button onclick="closeModal('game-over-modal'); openModal('final-message-modal')">OK</button>
                         </div>
@@ -268,7 +209,13 @@
                 <div id="final-message-modal" class="ios-modal">
                     <div class="ios-alert">
                         <h3>INGET YAA! ❤️</h3>
-                        <p>Walaupun kamu kalah di game, tapi kamu selalu menang di hati aku, HEHE. <br><br><b>I LOVE YOU!</b></p>
+                        <div style="text-align: left; padding: 0 20px 20px;">
+                            <p>walaupun kamu kalah,</p>
+                            <p>tapi kamu selalu menang</p>
+                            <p>kok di hati aku, HEHE</p>
+                            <p>^_^</p>
+                            <p style="margin-top:10px; color:#FF2D55; font-weight:bold; text-align:center;">I LOVE YOU ❤️</p>
+                        </div>
                         <div class="ios-alert-btns">
                             <button onclick="closeModal('final-message-modal'); goHome()">Love You Too</button>
                         </div>
