@@ -146,27 +146,53 @@
                 </div>
 
                 <div id="camera-app" class="app-screen">
-                    <div class="camera-interface">
+                    
+                    <div class="camera-interface" id="camera-view-mode">
                         <div class="camera-top-controls">
                             <i class="fas fa-bolt"></i>
                             <i class="fas fa-chevron-up"></i>
                             <i class="fas fa-circle-notch"></i>
                         </div>
+                        
                         <div class="camera-viewport">
-                            <div class="photo-display">
-                                <div style="color:white; text-align:center; margin-top:100px;">Tap Shutter Button</div>
+                            <div id="camera-flash" class="camera-flash"></div>
+                            <div class="photo-stack-container">
+                                <div class="initial-text">Tap Shutter to Capture</div>
                             </div>
                         </div>
+
                         <div class="camera-bottom-controls">
-                            <div style="display:flex; justify-content:center; gap:20px; font-size:12px; font-weight:bold; color:#666; margin-bottom:20px;">
+                            <div class="camera-modes">
                                 <span>VIDEO</span>
                                 <span style="color:#ffd700">PHOTO</span>
                                 <span>PORTRAIT</span>
                             </div>
-                            <div class="shutter-btn" id="shutter-trigger">
-                                <div class="shutter-inner"></div>
+                            <div class="shutter-area">
+                                <div class="gallery-preview-btn" onclick="openGalleryView()">
+                                    <img id="gallery-thumb" src="https://via.placeholder.com/50/333/333" style="opacity:0.3;">
+                                </div>
+                                
+                                <div class="shutter-btn" id="shutter-trigger">
+                                    <div class="shutter-inner"></div>
+                                </div>
+                                
+                                <div class="camera-flip-btn">
+                                    <i class="fas fa-sync-alt"></i>
+                                </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="gallery-interface" id="gallery-view-mode">
+                        <div class="gallery-header">
+                            <div class="gallery-back-btn" onclick="closeGalleryView()">
+                                <i class="fas fa-chevron-left"></i> Camera
+                            </div>
+                            <div class="gallery-title">Recents</div>
+                            <div class="gallery-select-btn">Select</div>
+                        </div>
+                        <div class="gallery-grid" id="gallery-grid-content">
+                            </div>
                     </div>
                 </div>
 
@@ -201,7 +227,6 @@
                                 <span class="chip" data-playlist="2">Blue</span>
                                 <span class="chip" data-playlist="3">Night Chills</span>
                             </div>
-                            <iframe id="spotify-iframe" style="display:none;" src=""></iframe>
                         </div>
                     </div>
                 </div>
@@ -249,11 +274,9 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
