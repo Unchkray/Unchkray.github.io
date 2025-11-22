@@ -201,7 +201,7 @@ function takePhoto() {
 
     if (currentPhotoIndex >= photos.length) {
         const display = document.getElementById('camera-main-display');
-        display.innerHTML = '<div class="initial-text" style="font-size:16px; font-weight:bold;">All Captured! Check Gallery 👈</div>';
+        display.innerHTML = '<div class="initial-text" style="font-size:16px; font-weight:bold;">Daripada jepret di sini, mending kirim fotomu ke aku aja😄</div>';
         return;
     }
 
@@ -225,7 +225,7 @@ function takePhoto() {
     if(cameraPhotoTimeout) clearTimeout(cameraPhotoTimeout);
     cameraPhotoTimeout = setTimeout(() => {
         display.innerHTML = ''; 
-    }, 1200); 
+    }, 8000); 
 
     currentPhotoIndex++;
 }
