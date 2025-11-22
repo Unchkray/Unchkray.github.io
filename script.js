@@ -24,7 +24,7 @@ const photos = [
 const playlists = {
     'good-vibes': {
         title: 'Good Vibes',
-        desc: 'Playlist • Rocki Gaming',
+        desc: 'Playlist • Mika Cantik',
         color: '#7d3c98',
         icon: 'fas fa-smile-beam',
         songs: [
@@ -35,7 +35,7 @@ const playlists = {
     },
     'blue': {
         title: 'Blue',
-        desc: 'Playlist • Rocki Gaming',
+        desc: 'Playlist • Mika Cantik',
         color: '#2980b9',
         icon: 'fas fa-cloud-rain',
         songs: [
@@ -45,7 +45,7 @@ const playlists = {
     },
     'night-chill': {
         title: 'Night Chill',
-        desc: 'Playlist • Rocki Gaming',
+        desc: 'Playlist • Mika Cantik',
         color: '#2c3e50',
         icon: 'fas fa-moon',
         songs: [
@@ -123,7 +123,7 @@ function closeChatRoom() {
 function startChatTypewriter() {
     const container = document.querySelector('.wa-messages-container');
     container.innerHTML = ''; 
-    const fullMessage = `Hi Mika,\n\nHappy Birthday yang ke-26!\n\nHari ini, aku cuma ingin kamu merasakan segala hal indah yang semesta simpan khusus buat kamu. Semua hal baik, semua keajaiban kecil, semua ketenangan yang cuma muncul karena kamu ada di dunia ini.\n\nSemoga setiap harapanmu tercapai, dari yang paling sederhana sampai yang paling lucu karena kamu memang unik dengan cara yang bikin aku jatuh cinta tiap hari. Aku selalu percaya kamu bisa melewati setiap tantangan, karena ada kekuatan besar dalam diri kamu yang lembut, yang kuat, yang selalu bikin aku kagum.\n\nTerima kasih sudah jadi bagian paling berharga dalam hidup aku. Kamu bikin hari-hari aku lebih ceria dan penuh warna. Dan di usia kamu yang ke-26 ini, aku berharap kamu makin bahagia, makin sukses, makin imut, dan makin cantik… walaupun kamu udah cantik banget sih!. 😚\n\nI love you so much! ❤️`;
+    const fullMessage = `Hi Sayang,\n\nHappy Birthday yang ke-26!\n\nHari ini, aku cuma ingin kamu merasakan segala hal indah yang semesta simpan khusus buat kamu. Semua hal baik, semua keajaiban kecil, semua ketenangan yang cuma muncul karena kamu ada di dunia ini.\n\nSemoga setiap harapanmu tercapai, dari yang paling sederhana sampai yang paling lucu karena kamu memang unik dengan cara yang bikin aku jatuh cinta tiap hari. Aku selalu percaya kamu bisa melewati setiap tantangan, karena ada kekuatan besar dalam diri kamu yang lembut, yang kuat, yang selalu bikin aku kagum.\n\nTerima kasih sudah jadi bagian paling berharga dalam hidup aku. Kamu bikin hari-hari aku lebih ceria dan penuh warna. Dan di usia kamu yang ke-26 ini, aku berharap kamu makin bahagia, makin sukses, makin imut, dan makin cantik… walaupun kamu udah cantik banget sih!. 😚\n\nI love you so much! ❤️`;
     const paragraphs = fullMessage.split('\n\n');
     let pIndex = 0;
     function typeNextParagraph() {
