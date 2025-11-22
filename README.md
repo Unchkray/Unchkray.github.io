@@ -1,2 +1,2 @@
 # Special Birthday
-A special birthday surprise page for Mika’s 26th birthday, made with love, gratitude, and all my heart.
+A special birthday surprise page for Mika’s birthday, made with love, gratitude, and all my heart.
