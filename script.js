@@ -306,38 +306,63 @@ function updatePlayIcons(isPlayingNow) {
     document.getElementById('np-play-btn-mini').className = icon;
 }
 
-// --- TETRIS LOGIC ---
+// --- TETRIS LOGIC (UPDATED) ---
 function initTetris() {
     const canvas = document.getElementById('tetris-canvas');
     const container = document.querySelector('.tetris-game-container');
-    const width = container.clientWidth > 0 ? container.clientWidth : 300;
-    const height = container.clientHeight > 0 ? container.clientHeight : 600;
-    canvas.width = width; canvas.height = height;
-    const blockSize = Math.floor(height / 20);
     
+    // Ambil ukuran dari container parent agar full screen dalam areanya
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    
+    canvas.width = width;
+    canvas.height = height;
+    
+    // Hitung blockSize dinamis (misal: 20 baris)
+    const rows = 20;
+    const blockSize = Math.floor(height / rows);
+    // Hitung cols berdasarkan lebar & blockSize yang didapat
+    const cols = Math.floor(width / blockSize);
+
     if (!tetrisGame) {
-        tetrisGame = { ctx: canvas.getContext('2d'), cols: 10, rows: 20, board: [], blockSize: blockSize, score: 0, level: 1, running: false, current: null };
-        resetTetris();
+        tetrisGame = { ctx: canvas.getContext('2d'), cols: cols, rows: rows, board: [], blockSize: blockSize, score: 0, level: 1, running: false, current: null, canvasWidth: width, canvasHeight: height };
+        // Inisialisasi board kosong pertama kali
+        for(let r=0;r<tetrisGame.rows;r++){tetrisGame.board[r]=[];for(let c=0;c<tetrisGame.cols;c++)tetrisGame.board[r][c]=0}
     } else {
+        // Update ukuran jika container berubah (jarang terjadi di sini, tapi bagus untuk safety)
         tetrisGame.blockSize = blockSize;
+        tetrisGame.cols = cols;
+        tetrisGame.rows = rows;
+        tetrisGame.canvasWidth = width;
+        tetrisGame.canvasHeight = height;
         tetrisGame.ctx = canvas.getContext('2d');
-        tetrisGame.running = true;
-        loopTetris();
     }
 }
 
 function resetTetris() {
-    for(let r=0;r<20;r++){tetrisGame.board[r]=[];for(let c=0;c<10;c++)tetrisGame.board[r][c]=0}
+    if(!tetrisGame) initTetris(); // Pastikan init dulu jika belum
+    
+    // Reset Board sesuai ukuran dinamis
+    tetrisGame.board = [];
+    for(let r=0;r<tetrisGame.rows;r++){tetrisGame.board[r]=[];for(let c=0;c<tetrisGame.cols;c++)tetrisGame.board[r][c]=0}
+    
     tetrisGame.score=0; tetrisGame.level=1;
     document.getElementById('score').textContent='0';
     tetrisGame.running=true;
     tetrisGame.current=newPiece();
+    dropStart = Date.now(); // Reset timer drop
     loopTetris();
 }
 function pauseTetris(){ if(tetrisGame) tetrisGame.running=false; }
 
 const PIECES=[[[[1,1,0],[0,1,1]],"#FF3B30"],[[[0,1,1],[1,1,0]],"#34C759"],[[[0,1,0],[1,1,1]],"#AF52DE"],[[[1,1],[1,1]],"#FFD60A"],[[[0,0,1],[1,1,1]],"#FF9500"],[[[1,1,1,1]],"#30B0C7"],[[[1,0,0],[1,1,1]],"#007AFF"]];
-function newPiece(){const r=Math.floor(Math.random()*PIECES.length);return{tetromino:PIECES[r][0],color:PIECES[r][1],x:3,y:-2}}
+
+function newPiece(){
+    const r=Math.floor(Math.random()*PIECES.length);
+    // Posisi awal di tengah (cols / 2) dikurangi setengah lebar bidak
+    const startX = Math.floor((tetrisGame.cols / 2) - (PIECES[r][0][0].length / 2));
+    return{tetromino:PIECES[r][0],color:PIECES[r][1],x:startX,y:-2}
+}
 
 let dropStart=Date.now();
 function loopTetris(){
@@ -350,12 +375,44 @@ function loopTetris(){
 }
 
 function drawTetris(){
-    const{ctx,blockSize,board,current}=tetrisGame;
-    ctx.fillStyle="#111"; ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
-    for(let r=0;r<20;r++)for(let c=0;c<10;c++)if(board[r][c])drawBlock(c,r,board[r][c]);
+    const{ctx,blockSize,board,current,cols,rows,canvasWidth,canvasHeight}=tetrisGame;
+    ctx.fillStyle="#111"; ctx.fillRect(0,0,canvasWidth,canvasHeight);
+    
+    // --- GAMBAR GRID ---
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.05)"; // Garis tipis transparan
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    // Garis Vertikal
+    for (let c = 0; c <= cols; c++) {
+        ctx.moveTo(c * blockSize, 0);
+        ctx.lineTo(c * blockSize, rows * blockSize);
+    }
+    // Garis Horizontal
+    for (let r = 0; r <= rows; r++) {
+        ctx.moveTo(0, r * blockSize);
+        ctx.lineTo(cols * blockSize, r * blockSize);
+    }
+    ctx.stroke();
+    ctx.closePath();
+    // -------------------
+
+    // Gambar Board & Piece Aktif (Gunakan cols/rows dinamis)
+    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++)if(board[r][c])drawBlock(c,r,board[r][c]);
     if(current)for(let r=0;r<current.tetromino.length;r++)for(let c=0;c<current.tetromino[r].length;c++)if(current.tetromino[r][c])drawBlock(current.x+c,current.y+r,current.color);
 }
-function drawBlock(x,y,color){const{ctx,blockSize}=tetrisGame;ctx.fillStyle=color;ctx.fillRect(x*blockSize,y*blockSize,blockSize,blockSize);ctx.strokeStyle="rgba(255,255,255,0.3)";ctx.lineWidth=2;ctx.strokeRect(x*blockSize,y*blockSize,blockSize,blockSize)}
+
+function drawBlock(x,y,color){
+    const{ctx,blockSize}=tetrisGame;
+    // Gambar hanya jika di dalam area canvas yang valid
+    if(x < 0 || x >= tetrisGame.cols || y >= tetrisGame.rows) return;
+
+    ctx.fillStyle=color;
+    ctx.fillRect(x*blockSize,y*blockSize,blockSize,blockSize);
+    ctx.strokeStyle="rgba(255,255,255,0.3)";
+    ctx.lineWidth=2;
+    // Gunakan strokeRect di dalam fillRect agar border rapi
+    ctx.strokeRect(x*blockSize+1,y*blockSize+1,blockSize-2,blockSize-2);
+}
 
 function moveDown(){
     if(!collision(0,1,tetrisGame.current.tetromino)) {
@@ -382,7 +439,9 @@ function rotate(){
     if(!tetrisGame.running) return;
     let nextPattern=tetrisGame.current.tetromino[0].map((val,index)=>tetrisGame.current.tetromino.map(row=>row[index]).reverse());if(!collision(0,0,nextPattern))tetrisGame.current.tetromino=nextPattern;
 }
-function collision(x,y,piece){for(let r=0;r<piece.length;r++)for(let c=0;c<piece[r].length;c++){if(!piece[r][c])continue;let newX=tetrisGame.current.x+c+x;let newY=tetrisGame.current.y+r+y;if(newX<0||newX>=10||newY>=20)return true;if(newY<0)continue;if(tetrisGame.board[newY][newX])return true}return false}
+// Update collision check dengan cols/rows dinamis
+function collision(x,y,piece){for(let r=0;r<piece.length;r++)for(let c=0;c<piece[r].length;c++){if(!piece[r][c])continue;let newX=tetrisGame.current.x+c+x;let newY=tetrisGame.current.y+r+y;if(newX<0||newX>=tetrisGame.cols||newY>=tetrisGame.rows)return true;if(newY<0)continue;if(tetrisGame.board[newY][newX])return true}return false}
+// Update lock dengan cols/rows dinamis
 function lock(){
     for(let r=0;r<tetrisGame.current.tetromino.length;r++)for(let c=0;c<tetrisGame.current.tetromino[r].length;c++){
         if(!tetrisGame.current.tetromino[r][c])continue;
@@ -392,10 +451,12 @@ function lock(){
             openModal('game-over-modal');
             return;
         }
-        if(tetrisGame.current.y+r>=0)tetrisGame.board[tetrisGame.current.y+r][tetrisGame.current.x+c]=tetrisGame.current.color;
+        if(tetrisGame.current.y+r>=0 && tetrisGame.current.y+r < tetrisGame.rows && tetrisGame.current.x+c >= 0 && tetrisGame.current.x+c < tetrisGame.cols){
+             tetrisGame.board[tetrisGame.current.y+r][tetrisGame.current.x+c]=tetrisGame.current.color;
+        }
     }
     let lines=0;
-    for(let r=0;r<20;r++){let full=true;for(let c=0;c<10;c++)if(!tetrisGame.board[r][c])full=false;if(full){lines++;tetrisGame.board.splice(r,1);tetrisGame.board.unshift(new Array(10).fill(0))}}
+    for(let r=0;r<tetrisGame.rows;r++){let full=true;for(let c=0;c<tetrisGame.cols;c++)if(!tetrisGame.board[r][c])full=false;if(full){lines++;tetrisGame.board.splice(r,1);tetrisGame.board.unshift(new Array(tetrisGame.cols).fill(0))}}
     if(lines>0){ tetrisGame.score+=lines*100; tetrisGame.level = Math.floor(tetrisGame.score / 300) + 1; document.getElementById('score').textContent=tetrisGame.score; }
 }
 
