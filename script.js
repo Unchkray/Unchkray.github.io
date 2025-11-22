@@ -28,9 +28,8 @@ const playlists = {
         color: '#7d3c98',
         icon: 'fas fa-smile-beam',
         songs: [
-            { title: "Happy Birthday Song", artist: "CoComelon", src: "./audio/happy_birthday.mp3" },
-            { title: "Respect", artist: "Songs for School", src: "./audio/respect.mp3" },
-            { title: "Selamat Ulang Tahun", artist: "Jamrud", src: "./audio/jamrud.mp3" }
+            { title: "Happy Birthday Song", artist: "CoComelon", src: "./audio/Happy Birthday Song.mp3" },
+            { title: "Selamat Ulang Tahun", artist: "Jamrud", src: "./audio/Jamrud - Selamat Ulang Tahun (Official Lyric Video).mp3" }
         ]
     },
     'blue': {
@@ -39,8 +38,7 @@ const playlists = {
         color: '#2980b9',
         icon: 'fas fa-cloud-rain',
         songs: [
-            { title: "Blue Skies", artist: "Birdy", src: "./audio/blue_skies.mp3" },
-            { title: "Ocean Eyes", artist: "Billie Eilish", src: "./audio/ocean_eyes.mp3" }
+            { title: "Blue", artist: "yung kai", src: "./audio/yung kai - blue (Lyrics).mp3" }
         ]
     },
     'night-chill': {
@@ -49,8 +47,8 @@ const playlists = {
         color: '#2c3e50',
         icon: 'fas fa-moon',
         songs: [
-            { title: "Night Changes", artist: "One Direction", src: "./audio/night_changes.mp3" },
-            { title: "Talking to the Moon", artist: "Bruno Mars", src: "./audio/talking_to_the_moon.mp3" }
+            { title: "One Direction - 18 (Audio)", artist: "One Direction", src: "./audio/One Direction - 18 (Audio).mp3" },
+            { title: "Rewrite The Stars", artist: "Anne-Marie & James Arthur", src: "./audio/Anne-Marie & James Arthur - Rewrite The Stars [from The Greatest Showman_ Reimagined].mp3" }
         ]
     }
 };
