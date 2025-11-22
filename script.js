@@ -4,10 +4,11 @@ let tetrisGame = null;
 let typingInterval = null;
 let currentPhotoIndex = 0;
 let isPlaying = false; 
+let lastCapturedPhoto = null;
 
-// --- Setup Data Foto (PASTIKAN NAMA FILE BENAR) ---
+// --- Setup Data Foto ---
 const photos = [
-    { text: 'Canti yang Gak Pernah Gagal 💕', image: './images/photo1.jpg' },
+    { text: 'Cantik yang Gak Pernah Gagal 💕', image: './images/photo1.jpg' },
     { text: 'Imutnya Bikin Lupa Dunia 🧸', image: './images/photo2.jpg' },
     { text: 'Elegan ✨', image: './images/photo3.jpg' },
     { text: 'Senyum yang Jadi Favorit Aku ❤️', image: './images/photo4.jpg' },
@@ -17,19 +18,50 @@ const photos = [
     { text: 'Yang Aku Sayang Selamanya 💖', image: './images/photo8.jpg' }
 ];
 
-// --- Setup Data Lagu (Spotify) ---
-// Menggunakan link audio online agar bunyi
-const songs = [
-    { title: "Happy Birthday", artist: "Special Mix", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
-    { title: "Beautiful Day", artist: "Mika's Vibe", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
-    { title: "Night Thoughts", artist: "Chill Mode", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" }
-];
+// --- Setup Data Playlist & Lagu ---
+// Menggunakan link audio online untuk demo. Ganti 'src' dengan file lokal jika mau.
+const playlists = {
+    'good-vibes': {
+        title: 'Good Vibes',
+        desc: 'Playlist • Rocki Gaming',
+        color: '#7d3c98',
+        icon: 'fas fa-smile-beam',
+        songs: [
+            { title: "Happy Birthday Song", artist: "CoComelon", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+            { title: "Respect", artist: "Songs for School", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+            { title: "Selamat Ulang Tahun", artist: "Jamrud", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" }
+        ]
+    },
+    'blue': {
+        title: 'Blue',
+        desc: 'Playlist • Rocki Gaming',
+        color: '#2980b9',
+        icon: 'fas fa-cloud-rain',
+        songs: [
+            { title: "Blue Skies", artist: "Birdy", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
+            { title: "Ocean Eyes", artist: "Billie Eilish", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" }
+        ]
+    },
+    'night-chill': {
+        title: 'Night Chill',
+        desc: 'Playlist • Rocki Gaming',
+        color: '#2c3e50',
+        icon: 'fas fa-moon',
+        songs: [
+            { title: "Night Changes", artist: "One Direction", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
+            { title: "Talking to the Moon", artist: "Bruno Mars", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" }
+        ]
+    }
+};
+
+let currentPlaylist = [];
+let currentSongIndex = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
     simulateBoot();
     updateClock();
     setInterval(updateClock, 60000);
-    renderPlaylist(); 
+    renderLibrary(); // Render daftar playlist awal
 });
 
 function updateClock() {
@@ -71,7 +103,7 @@ function goHome() {
         currentEl.classList.remove('active');
         if (currentApp === 'whatsapp') closeChatRoom();
         if (currentApp === 'tetris') pauseTetris();
-        // Matikan musik jika keluar? (Opsional, saat ini musik tetap jalan)
+        if (currentApp === 'camera') resetCameraState(); // Reset Camera saat keluar
     }
     homeScreen.classList.add('active');
     currentApp = null;
@@ -123,53 +155,49 @@ function startChatTypewriter() {
     typeNextParagraph();
 }
 
-// --- CAMERA LOGIC (FIXED) ---
+// --- CAMERA LOGIC (RESETABLE & SINGLE SHOT) ---
 function initCamera() {
-    const container = document.querySelector('.photo-stack-container');
-    if (currentPhotoIndex < photos.length) {
-         container.innerHTML = '<div class="initial-text">Tap Shutter to Capture</div>';
+    const display = document.getElementById('camera-main-display');
+    // Jika belum ada foto yg diambil, tampilkan teks
+    if (!lastCapturedPhoto) {
+        display.innerHTML = '<div class="initial-text">Tap Shutter to Capture</div>';
+        document.getElementById('gallery-thumb').style.opacity = '0';
     }
-    closeGalleryView();
 }
 
-function captureOnePhoto() {
-    // 1. Cek Foto Habis
+function resetCameraState() {
+    currentPhotoIndex = 0;
+    lastCapturedPhoto = null;
+    const display = document.getElementById('camera-main-display');
+    display.innerHTML = '<div class="initial-text">Tap Shutter to Capture</div>';
+    document.getElementById('gallery-thumb').style.opacity = '0';
+    // Reset Gallery View juga jika perlu
+    // document.getElementById('gallery-full-img').src = ""; 
+}
+
+function takePhoto() {
+    // 1. Cek apakah foto habis
     if (currentPhotoIndex >= photos.length) {
-        const container = document.querySelector('.photo-stack-container');
-        if (!container.querySelector('.done-msg')) {
-            const doneMsg = document.createElement('div');
-            doneMsg.className = 'done-msg';
-            doneMsg.style.textAlign = 'center'; doneMsg.style.color = 'white'; doneMsg.style.marginTop = '20px';
-            doneMsg.innerHTML = '<b>All Captured! Check Gallery 👈</b>';
-            container.appendChild(doneMsg);
-            container.scrollTop = container.scrollHeight;
-        }
+        const display = document.getElementById('camera-main-display');
+        display.innerHTML = '<div class="initial-text" style="font-size:16px; font-weight:bold;">All Captured! Check Gallery 👈</div>';
         return;
     }
 
-    // 2. Efek Flash
+    // 2. Flash Effect
     const flash = document.getElementById('camera-flash');
     flash.style.opacity = '1';
     setTimeout(() => { flash.style.opacity = '0'; }, 150);
 
-    // 3. Render Foto
+    // 3. Ambil Data Foto
     const data = photos[currentPhotoIndex];
-    const container = document.querySelector('.photo-stack-container');
-    if(container.querySelector('.initial-text')) container.innerHTML = '';
+    lastCapturedPhoto = data;
 
-    const wrapper = document.createElement('div');
-    wrapper.className = 'photo-frame';
-    wrapper.innerHTML = `
-        <img src="${data.image}" onerror="this.src='https://via.placeholder.com/300x400/ccc/333?text=Image+Error'">
-        <div class="photo-overlay-text">${data.text}</div>
-    `;
-    container.appendChild(wrapper);
-    container.scrollTop = container.scrollHeight;
-
-    // 4. Masuk Gallery
-    addToGallery(data);
-
-    // 5. Update Thumbnail
+    // 4. Logic "Jepret dan Hilang"
+    // Foto tidak menetap di layar utama, melainkan "masuk" ke gallery thumbnail
+    const display = document.getElementById('camera-main-display');
+    display.innerHTML = ''; // Kosongkan layar (siap jepret lagi)
+    
+    // Update Thumbnail Kiri Bawah
     const thumb = document.getElementById('gallery-thumb');
     thumb.src = data.image;
     thumb.style.opacity = '1';
@@ -177,87 +205,122 @@ function captureOnePhoto() {
     currentPhotoIndex++;
 }
 
-function addToGallery(photoData) {
-    const grid = document.getElementById('gallery-grid-content');
-    const item = document.createElement('div');
-    item.className = 'gallery-item';
-    item.innerHTML = `<img src="${photoData.image}">`;
-    grid.appendChild(item);
-}
-function openGalleryView() {
-    document.getElementById('camera-view-mode').style.display = 'none';
-    document.getElementById('gallery-view-mode').classList.add('active');
-}
-function closeGalleryView() {
-    document.getElementById('gallery-view-mode').classList.remove('active');
-    document.getElementById('camera-view-mode').style.display = 'flex';
+function openFullGallery() {
+    // Membuka foto terakhir secara full screen
+    if (lastCapturedPhoto) {
+        document.getElementById('gallery-full-img').src = lastCapturedPhoto.image;
+        document.getElementById('gallery-overlay').classList.add('active');
+    } else {
+        alert("Belum ada foto yang diambil!");
+    }
 }
 
-// --- SPOTIFY LOGIC (AUDIO PLAYER) ---
-function renderPlaylist() {
-    const listContainer = document.getElementById('song-list-container');
-    listContainer.innerHTML = '';
+function closeFullGallery() {
+    document.getElementById('gallery-overlay').classList.remove('active');
+}
+
+// --- SPOTIFY LOGIC (CLONE UI & AUDIO) ---
+function renderLibrary() {
+    const list = document.getElementById('spotify-playlist-list');
+    list.innerHTML = '';
     
-    songs.forEach((song, index) => {
+    Object.keys(playlists).forEach(key => {
+        const pl = playlists[key];
         const item = document.createElement('div');
-        item.className = 'song-item';
-        item.onclick = () => playSong(index);
+        item.className = 'playlist-item';
+        item.onclick = () => openPlaylist(key);
         item.innerHTML = `
-            <div class="song-left">
-                <div class="song-idx">${index + 1}</div>
-                <div class="song-details">
-                    <div class="song-title">${song.title}</div>
-                    <div class="song-artist">${song.artist}</div>
-                </div>
+            <div class="playlist-thumb" style="background:${pl.color}"><i class="${pl.icon}" style="color:white"></i></div>
+            <div class="playlist-info">
+                <h4>${pl.title}</h4>
+                <p>${pl.desc}</p>
             </div>
-            <div class="song-more"><i class="fas fa-ellipsis-h"></i></div>
         `;
-        listContainer.appendChild(item);
+        list.appendChild(item);
     });
+}
+
+function openPlaylist(key) {
+    const pl = playlists[key];
+    currentPlaylist = pl.songs;
+    
+    // Setup View Detail
+    document.getElementById('pl-title').textContent = pl.title;
+    document.getElementById('pl-desc').textContent = pl.desc;
+    document.getElementById('pl-cover-art').style.background = pl.color;
+    document.getElementById('pl-cover-art').innerHTML = `<i class="${pl.icon}"></i>`;
+    
+    // Setup Tombol Play Besar
+    document.getElementById('pl-play-big').onclick = () => playSong(0);
+
+    // Render Lagu
+    const songList = document.getElementById('pl-song-list');
+    songList.innerHTML = '';
+    pl.songs.forEach((song, idx) => {
+        const row = document.createElement('div');
+        row.className = 'song-row';
+        row.onclick = () => playSong(idx);
+        row.innerHTML = `
+            <div class="song-left">
+                <div class="s-title">${song.title}</div>
+                <div class="s-artist">${song.artist}</div>
+            </div>
+            <i class="fas fa-ellipsis-h" style="color:#b3b3b3"></i>
+        `;
+        songList.appendChild(row);
+    });
+
+    // Switch View
+    document.getElementById('spotify-library-view').classList.remove('active');
+    document.getElementById('spotify-playlist-view').classList.add('active');
+}
+
+function closePlaylist() {
+    document.getElementById('spotify-playlist-view').classList.remove('active');
+    document.getElementById('spotify-library-view').classList.add('active');
 }
 
 function playSong(index) {
+    if(currentPlaylist.length === 0) return;
+    
+    currentSongIndex = index;
+    const song = currentPlaylist[index];
     const audio = document.getElementById('audio-player');
-    const song = songs[index];
     
     audio.src = song.src;
-    audio.play().then(() => {
-        isPlaying = true;
-        updatePlayerUI(song);
-    }).catch(e => {
-        console.log("Audio error:", e);
-        alert("Error memutar lagu. Cek koneksi internet atau file audio.");
-    });
+    audio.play().catch(e => console.log("Audio error:", e));
+    isPlaying = true;
+    
+    updateMiniPlayer(song);
 }
 
 function togglePlay() {
     const audio = document.getElementById('audio-player');
-    if (isPlaying) {
+    if(isPlaying) {
         audio.pause();
         isPlaying = false;
-        document.getElementById('np-play-btn').className = 'fas fa-play';
+        updatePlayIcons(false);
     } else {
-        if (audio.src) {
+        if(audio.src) {
             audio.play();
             isPlaying = true;
-            document.getElementById('np-play-btn').className = 'fas fa-pause';
+            updatePlayIcons(true);
         }
     }
 }
 
-function updatePlayerUI(song) {
-    document.getElementById('np-title').textContent = song.title;
-    document.getElementById('np-artist').textContent = song.artist;
-    document.getElementById('np-play-btn').className = 'fas fa-pause';
-    
-    const titles = document.querySelectorAll('.song-title');
-    titles.forEach(t => t.classList.remove('active-song'));
-    titles.forEach(t => {
-        if(t.textContent === song.title) t.classList.add('active-song');
-    });
+function updateMiniPlayer(song) {
+    document.getElementById('np-title-mini').textContent = song.title;
+    document.getElementById('np-artist-mini').textContent = song.artist;
+    updatePlayIcons(true);
 }
 
-// --- TETRIS LOGIC (FASTER) ---
+function updatePlayIcons(isPlayingNow) {
+    const icon = isPlayingNow ? 'fas fa-pause' : 'fas fa-play';
+    document.getElementById('np-play-btn-mini').className = icon;
+}
+
+// --- TETRIS LOGIC (FASTER & FIXED GAME OVER) ---
 function initTetris() {
     const canvas = document.getElementById('tetris-canvas');
     const container = document.querySelector('.tetris-game-container');
@@ -279,7 +342,6 @@ function resetTetris() {
     tetrisGame.score=0;
     tetrisGame.level=1;
     document.getElementById('score').textContent='0';
-    document.getElementById('level').textContent='1';
     tetrisGame.running=true;tetrisGame.current=newPiece();loopTetris();
 }
 function pauseTetris(){ if(tetrisGame) tetrisGame.running=false; }
@@ -291,8 +353,8 @@ let dropStart=Date.now();
 function loopTetris(){
     if(!tetrisGame.running)return;
     let now=Date.now();let delta=now-dropStart;
-    // Speed Formula: Lebih cepat
-    let speed = Math.max(100, 700 - (tetrisGame.level * 60));
+    // Speed Formula: Base 400ms (Lebih Cepat)
+    let speed = Math.max(50, 400 - (tetrisGame.level * 40));
     if(delta > speed){
         moveDown();
         dropStart=Date.now();
@@ -315,6 +377,7 @@ function moveDown(){
     } else {
         lock();
         tetrisGame.current=newPiece();
+        // GAME OVER CHECK
         if(collision(0,0,tetrisGame.current.tetromino)){
             tetrisGame.running=false;
             document.getElementById('final-score').textContent = tetrisGame.score;
@@ -334,7 +397,6 @@ function lock(){
         tetrisGame.score+=lines*100;
         tetrisGame.level = Math.floor(tetrisGame.score / 300) + 1;
         document.getElementById('score').textContent=tetrisGame.score;
-        document.getElementById('level').textContent=tetrisGame.level;
     }
 }
 
