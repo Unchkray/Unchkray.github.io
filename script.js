@@ -5,22 +5,23 @@ let typingInterval = null;
 let currentPhotoIndex = 0;
 let isPlaying = false; 
 let lastCapturedPhoto = null;
+let isGalleryOpen = false; // Flag untuk mencegah klik shutter saat di gallery
 
 // --- Setup Data Foto ---
 const photos = [
-    { text: 'Kecantikan yang Gak Pernah Gagal 💕', image: './images/photo1.jpg' },
+    { text: 'Cantik yang Gak Pernah Gagal 💕', image: './images/photo1.jpg' },
     { text: 'Imutnya Bikin Lupa Dunia 🧸', image: './images/photo2.jpg' },
-    { text: 'Elegan Tanpa Usaha ✨', image: './images/photo3.jpg' },
+    { text: 'Elegan ✨', image: './images/photo3.jpg' },
     { text: 'Senyum yang Jadi Favorit Aku ❤️', image: './images/photo4.jpg' },
     { text: 'Pesona yang Susah Dilupain 🌹', image: './images/photo5.jpg' },
     { text: 'Cantik dari Sudut Mana Pun 📸', image: './images/photo6.jpg' },
-    { text: 'Momen Manis Tanpa Kata 🍯', image: './images/photo7.jpg' },
+    { text: 'Manis Bikin Diabetes 🍯', image: './images/photo7.jpg' },
     { text: 'Yang Aku Sayang Selamanya 💖', image: './images/photo8.jpg' }
 ];
 
-// --- Setup Data Playlist & Lagu ---
-// !!! PENTING: Ganti 'src' dengan file di folder audio Anda (misal: ./audio/lagu1.mp3)
-// Gunakan format lokal: src: './audio/nama_file.mp3'
+// --- Setup Data Playlist & Lagu (GANTI DENGAN FILE LOKAL ANDA) ---
+// Contoh path lokal: './audio/nama_file.mp3'
+// Anda HARUS membuat folder 'audio' dan memasukkan file mp3 ke sana.
 const playlists = {
     'good-vibes': {
         title: 'Good Vibes',
@@ -28,9 +29,9 @@ const playlists = {
         color: '#7d3c98',
         icon: 'fas fa-smile-beam',
         songs: [
-            { title: "Happy Birthday Song", artist: "CoComelon", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
-            { title: "Respect", artist: "Songs for School", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
-            { title: "Selamat Ulang Tahun", artist: "Jamrud", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" }
+            { title: "Happy Birthday Song", artist: "CoComelon", src: "./audio/happy_birthday.mp3" },
+            { title: "Respect", artist: "Songs for School", src: "./audio/respect.mp3" },
+            { title: "Selamat Ulang Tahun", artist: "Jamrud", src: "./audio/jamrud.mp3" }
         ]
     },
     'blue': {
@@ -39,8 +40,8 @@ const playlists = {
         color: '#2980b9',
         icon: 'fas fa-cloud-rain',
         songs: [
-            { title: "Blue Skies", artist: "Birdy", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
-            { title: "Ocean Eyes", artist: "Billie Eilish", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" }
+            { title: "Blue Skies", artist: "Birdy", src: "./audio/blue_skies.mp3" },
+            { title: "Ocean Eyes", artist: "Billie Eilish", src: "./audio/ocean_eyes.mp3" }
         ]
     },
     'night-chill': {
@@ -49,8 +50,8 @@ const playlists = {
         color: '#2c3e50',
         icon: 'fas fa-moon',
         songs: [
-            { title: "Night Changes", artist: "One Direction", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3" },
-            { title: "Talking to the Moon", artist: "Bruno Mars", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3" }
+            { title: "Night Changes", artist: "One Direction", src: "./audio/night_changes.mp3" },
+            { title: "Talking to the Moon", artist: "Bruno Mars", src: "./audio/talking_to_the_moon.mp3" }
         ]
     }
 };
@@ -156,91 +157,80 @@ function startChatTypewriter() {
     typeNextParagraph();
 }
 
-// --- CAMERA LOGIC ---
+// --- CAMERA LOGIC (FULL FIX) ---
 function initCamera() {
-    const display = document.querySelector('.photo-stack-container');
-    // Pastikan tombol jepret aktif dan teks awal muncul jika belum ada foto
-    if (!lastCapturedPhoto) {
-        display.innerHTML = '<div class="initial-text">Tap Shutter to Capture</div>';
-        document.getElementById('gallery-thumb').style.opacity = '0';
-    }
-    closeGalleryView();
+    resetCameraState();
 }
 
 function resetCameraState() {
     currentPhotoIndex = 0;
     lastCapturedPhoto = null;
-    const display = document.querySelector('.photo-stack-container');
+    isGalleryOpen = false;
+    
+    const display = document.getElementById('camera-main-display');
     display.innerHTML = '<div class="initial-text">Tap Shutter to Capture</div>';
     document.getElementById('gallery-thumb').style.opacity = '0';
+    
+    // Enable Shutter
+    const btn = document.getElementById('shutter-trigger');
+    btn.classList.remove('disabled');
+    
+    closeGalleryOverlay();
 }
 
 function takePhoto() {
-    // 1. Cek apakah foto habis
+    // Guard: Jangan jepret jika gallery terbuka atau tombol disabled
+    if (isGalleryOpen) return;
+
+    // 1. Cek Habis
     if (currentPhotoIndex >= photos.length) {
-        const container = document.querySelector('.photo-stack-container');
-        // Hapus konten lama
-        container.innerHTML = '';
-        const doneMsg = document.createElement('div');
-        doneMsg.style.textAlign = 'center'; doneMsg.style.color = 'white'; doneMsg.style.marginTop = 'auto'; doneMsg.style.marginBottom = 'auto';
-        doneMsg.innerHTML = '<b>All Captured!<br>Check Gallery 👈</b>';
-        container.appendChild(doneMsg);
+        const display = document.getElementById('camera-main-display');
+        display.innerHTML = '<div class="initial-text" style="font-size:16px; font-weight:bold;">All Captured! Check Gallery 👈</div>';
         return;
     }
 
-    // 2. Efek Flash
+    // 2. Flash
     const flash = document.getElementById('camera-flash');
     flash.style.opacity = '1';
-    setTimeout(() => { flash.style.opacity = '0'; }, 150);
+    setTimeout(() => { flash.style.opacity = '0'; }, 100);
 
-    // 3. Ambil Data Foto
+    // 3. Logic Tampil Foto Sekejap (Review)
     const data = photos[currentPhotoIndex];
     lastCapturedPhoto = data;
-
-    // 4. Kosongkan layar (Logic foto terbang ke gallery)
-    const container = document.querySelector('.photo-stack-container');
-    container.innerHTML = ''; // Layar jadi hitam kembali (siap jepret lagi)
+    const display = document.getElementById('camera-main-display');
     
-    // 5. Masuk ke Gallery Grid
-    addToGallery(data);
+    // Tampilkan foto di layar utama
+    display.innerHTML = `<img src="${data.image}" style="width:100%; height:100%; object-fit:cover;">`;
 
-    // 6. Update Thumbnail Kiri Bawah
+    // Update Thumbnail Kiri Bawah
     const thumb = document.getElementById('gallery-thumb');
     thumb.src = data.image;
     thumb.style.opacity = '1';
 
+    // Setelah 800ms, hilangkan foto dari layar utama (efek sudah masuk gallery)
+    setTimeout(() => {
+        display.innerHTML = ''; // Layar jadi hitam/kosong
+    }, 800);
+
     currentPhotoIndex++;
 }
 
-function addToGallery(photoData) {
-    const grid = document.getElementById('gallery-grid-content');
-    const item = document.createElement('div');
-    item.className = 'gallery-item';
-    item.innerHTML = `<img src="${photoData.image}">`;
-    grid.appendChild(item);
-}
-
-function openFullGallery() {
+function openGalleryOverlay() {
     if (lastCapturedPhoto) {
+        isGalleryOpen = true; // Disable shutter
+        document.getElementById('shutter-trigger').classList.add('disabled');
+        
         document.getElementById('gallery-full-img').src = lastCapturedPhoto.image;
         document.getElementById('gallery-overlay').classList.add('active');
     } else {
-        // Do nothing if empty
+        // Do nothing if no photo
     }
 }
 
-function closeFullGallery() {
+function closeGalleryOverlay() {
+    isGalleryOpen = false; // Enable shutter
+    document.getElementById('shutter-trigger').classList.remove('disabled');
     document.getElementById('gallery-overlay').classList.remove('active');
-}
-
-function openGalleryView() {
-    document.getElementById('camera-view-mode').style.display = 'none';
-    document.getElementById('gallery-view-mode').classList.add('active');
-}
-
-function closeGalleryView() {
-    document.getElementById('gallery-view-mode').classList.remove('active');
-    document.getElementById('camera-view-mode').style.display = 'flex';
 }
 
 // --- SPOTIFY LOGIC ---
@@ -296,9 +286,15 @@ function playSong(index) {
     const song = currentPlaylist[index];
     const audio = document.getElementById('audio-player');
     audio.src = song.src;
-    audio.play().catch(e => { console.log("Err", e); alert("Gunakan file lokal agar lancar."); });
-    isPlaying = true;
-    updateMiniPlayer(song);
+    
+    // Error handling untuk file lokal
+    audio.play().then(() => {
+        isPlaying = true;
+        updateMiniPlayer(song);
+    }).catch(e => {
+        console.log("Audio error:", e);
+        alert("File lagu tidak ditemukan! Pastikan folder 'audio' dan file mp3 sudah ada.");
+    });
 }
 
 function togglePlay() {
@@ -318,28 +314,21 @@ function updatePlayIcons(isPlayingNow) {
     document.getElementById('np-play-btn-mini').className = icon;
 }
 
-// --- TETRIS LOGIC (FIXED: Blank & Game Over) ---
+// --- TETRIS LOGIC (FASTER & GAME OVER FIX) ---
 function initTetris() {
     const canvas = document.getElementById('tetris-canvas');
     const container = document.querySelector('.tetris-game-container');
-    
-    // Force Calculation saat app dibuka (ini perbaikan utamanya)
-    const width = container.clientWidth;
-    const height = container.clientHeight;
-    
-    // Jika width 0 (karena animasi transisi), beri default fallback
-    canvas.width = width > 0 ? width : 300;
-    canvas.height = height > 0 ? height : 600;
-    
-    // Re-calculate block size
-    const blockSize = Math.floor(canvas.height / 20);
+    const width = container.clientWidth > 0 ? container.clientWidth : 300;
+    const height = container.clientHeight > 0 ? container.clientHeight : 600;
+    canvas.width = width; canvas.height = height;
+    const blockSize = Math.floor(height / 20);
     
     if (!tetrisGame) {
         tetrisGame = { ctx: canvas.getContext('2d'), cols: 10, rows: 20, board: [], blockSize: blockSize, score: 0, level: 1, running: false, current: null };
         resetTetris();
     } else {
         tetrisGame.blockSize = blockSize;
-        tetrisGame.ctx = canvas.getContext('2d'); // Refresh context
+        tetrisGame.ctx = canvas.getContext('2d');
         tetrisGame.running = true;
         loopTetris();
     }
@@ -347,8 +336,7 @@ function initTetris() {
 
 function resetTetris() {
     for(let r=0;r<20;r++){tetrisGame.board[r]=[];for(let c=0;c<10;c++)tetrisGame.board[r][c]=0}
-    tetrisGame.score=0;
-    tetrisGame.level=1;
+    tetrisGame.score=0; tetrisGame.level=1;
     document.getElementById('score').textContent='0';
     tetrisGame.running=true;
     tetrisGame.current=newPiece();
@@ -363,8 +351,8 @@ let dropStart=Date.now();
 function loopTetris(){
     if(!tetrisGame || !tetrisGame.running) return;
     let now=Date.now();let delta=now-dropStart;
-    // Speed dipercepat
-    let speed = Math.max(50, 400 - (tetrisGame.level * 40));
+    // SPEED: Base 300ms (Cepat)
+    let speed = Math.max(50, 300 - (tetrisGame.level * 30));
     if(delta > speed){ moveDown(); dropStart=Date.now(); }
     drawTetris();
     requestAnimationFrame(loopTetris);
@@ -372,9 +360,7 @@ function loopTetris(){
 
 function drawTetris(){
     const{ctx,blockSize,board,current}=tetrisGame;
-    // Pastikan canvas dibersihkan sebelum gambar ulang
     ctx.fillStyle="#111"; ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
-    
     for(let r=0;r<20;r++)for(let c=0;c<10;c++)if(board[r][c])drawBlock(c,r,board[r][c]);
     if(current)for(let r=0;r<current.tetromino.length;r++)for(let c=0;c<current.tetromino[r].length;c++)if(current.tetromino[r][c])drawBlock(current.x+c,current.y+r,current.color);
 }
@@ -386,7 +372,7 @@ function moveDown(){
     } else {
         lock();
         tetrisGame.current=newPiece();
-        // Check Game Over (Collision saat spawn baru)
+        // CHECK GAME OVER: Jika piece baru langsung collide
         if(collision(0,0,tetrisGame.current.tetromino)){
             tetrisGame.running=false;
             document.getElementById('final-score').textContent = tetrisGame.score;
@@ -399,7 +385,17 @@ function moveRight(){if(!collision(1,0,tetrisGame.current.tetromino))tetrisGame.
 function rotate(){let nextPattern=tetrisGame.current.tetromino[0].map((val,index)=>tetrisGame.current.tetromino.map(row=>row[index]).reverse());if(!collision(0,0,nextPattern))tetrisGame.current.tetromino=nextPattern}
 function collision(x,y,piece){for(let r=0;r<piece.length;r++)for(let c=0;c<piece[r].length;c++){if(!piece[r][c])continue;let newX=tetrisGame.current.x+c+x;let newY=tetrisGame.current.y+r+y;if(newX<0||newX>=10||newY>=20)return true;if(newY<0)continue;if(tetrisGame.board[newY][newX])return true}return false}
 function lock(){
-    for(let r=0;r<tetrisGame.current.tetromino.length;r++)for(let c=0;c<tetrisGame.current.tetromino[r].length;c++){if(!tetrisGame.current.tetromino[r][c])continue;if(tetrisGame.current.y+r>=0)tetrisGame.board[tetrisGame.current.y+r][tetrisGame.current.x+c]=tetrisGame.current.color}
+    for(let r=0;r<tetrisGame.current.tetromino.length;r++)for(let c=0;c<tetrisGame.current.tetromino[r].length;c++){
+        if(!tetrisGame.current.tetromino[r][c])continue;
+        // GAME OVER CHECK (Jika numpuk sampai atas y < 0)
+        if(tetrisGame.current.y+r < 0) {
+            tetrisGame.running=false;
+            document.getElementById('final-score').textContent = tetrisGame.score;
+            openModal('game-over-modal');
+            return;
+        }
+        if(tetrisGame.current.y+r>=0)tetrisGame.board[tetrisGame.current.y+r][tetrisGame.current.x+c]=tetrisGame.current.color
+    }
     let lines=0;
     for(let r=0;r<20;r++){let full=true;for(let c=0;c<10;c++)if(!tetrisGame.board[r][c])full=false;if(full){lines++;tetrisGame.board.splice(r,1);tetrisGame.board.unshift(new Array(10).fill(0))}}
     if(lines>0){ tetrisGame.score+=lines*100; tetrisGame.level = Math.floor(tetrisGame.score / 300) + 1; document.getElementById('score').textContent=tetrisGame.score; }
