@@ -1,7 +1,3 @@
-// ==========================================
-// BAGIAN 1: DATA & SETUP
-// ==========================================
-
 // --- Global State ---
 let currentApp = null;
 let tetrisGame = null;
@@ -12,7 +8,7 @@ let lastCapturedPhoto = null;
 let isGalleryOpen = false;
 let cameraPhotoTimeout = null;
 
-// --- Data Foto (Pastikan file ada di folder images) ---
+// --- Setup Data Foto ---
 const photos = [
     { text: 'Cantiknya Kebangetan 💕', image: './images/photo1.jpg' },
     { text: 'Imutnya Bikin Lupa Dunia 🧸', image: './images/photo2.jpg' },
@@ -24,7 +20,7 @@ const photos = [
     { text: 'Yang Aku Sayang Selamanya 💖', image: './images/photo8.jpg' }
 ];
 
-// --- Data Playlist (Pastikan file ada di folder audio) ---
+// --- Setup Data Playlist & Lagu (LOKAL) ---
 const playlists = {
     'good-vibes': {
         title: 'Good Vibes',
@@ -62,80 +58,101 @@ const playlists = {
 let currentPlaylist = [];
 let currentSongIndex = 0;
 
-// --- Boot & Clock ---
 document.addEventListener('DOMContentLoaded', () => {
-    // Animasi Loading
-    setTimeout(() => { document.getElementById('progress-fill').style.width = '100%'; }, 500);
-    setTimeout(() => {
-        document.getElementById('loading-screen').classList.remove('active');
-        document.getElementById('home-screen').classList.add('active');
-    }, 2500);
-    
+    simulateBoot();
     updateClock();
     setInterval(updateClock, 60000);
-    renderLibrary();
+    renderLibrary(); 
 });
 
 function updateClock() {
     const now = new Date();
-    const h = String(now.getHours()).padStart(2,'0');
-    const m = String(now.getMinutes()).padStart(2,'0');
-    document.getElementById('clock').textContent = `${h}:${m}`;
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    document.getElementById('clock').textContent = `${hours}:${minutes}`;
 }
 
-// --- Navigation System ---
-window.openApp = function(appName) {
-    document.getElementById('home-screen').classList.remove('active');
-    document.getElementById(`${appName}-app`).classList.add('active');
-    currentApp = appName;
-    
-    if (appName === 'tetris') { initTetris(); resetTetris(); }
-    if (appName === 'camera') initCamera();
-};
+function simulateBoot() {
+    const bar = document.getElementById('progress-fill');
+    setTimeout(() => { bar.style.width = '30%'; }, 500);
+    setTimeout(() => { bar.style.width = '70%'; }, 1500);
+    setTimeout(() => { bar.style.width = '100%'; }, 2500);
+    setTimeout(() => {
+        document.getElementById('loading-screen').classList.remove('active');
+        document.getElementById('home-screen').classList.add('active');
+    }, 3000);
+}
 
-window.goHome = function() {
-    // Reset semua layar
-    document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
-    // Aktifkan home
+// --- Navigation ---
+function openApp(appName) {
+    const homeScreen = document.getElementById('home-screen');
+    const targetApp = document.getElementById(`${appName}-app`);
+    if (targetApp) {
+        homeScreen.classList.remove('active');
+        targetApp.classList.add('active');
+        currentApp = appName;
+        if (appName === 'tetris') initTetris();
+        if (appName === 'camera') initCamera();
+    }
+}
+
+function goHome() {
+    document.querySelectorAll('.app-screen').forEach(screen => {
+        screen.classList.remove('active');
+    });
     document.getElementById('home-screen').classList.add('active');
-    
-    // Reset state aplikasi
+
     if (currentApp === 'whatsapp') closeChatRoom();
     if (currentApp === 'tetris') pauseTetris();
     if (currentApp === 'camera') resetCameraState();
     
     currentApp = null;
-};
-
-// ==========================================
-// BAGIAN 2: APPS LOGIC
-// ==========================================
+}
 
 // --- WhatsApp ---
-window.openChatRoom = function() {
+function openChatRoom() {
     document.getElementById('wa-list-view').classList.remove('active');
     document.getElementById('wa-chat-view').classList.add('active');
-    
-    const container = document.querySelector('.wa-messages-container');
-    container.innerHTML = ''; 
-    
-    const text = "Hi Mika,\n\nHappy Birthday yang ke-26! 🎉\n\nSemoga semua impianmu tercapai, makin cantik, makin pintar, dan bahagia selalu. Terima kasih sudah jadi bagian terindah di hidupku. I love you! ❤️";
-    
-    // Simple bubble chat
-    const bubble = document.createElement('div');
-    bubble.className = 'msg-bubble msg-in';
-    bubble.style.marginTop = '20px';
-    bubble.innerText = text;
-    container.appendChild(bubble);
-};
-
-window.closeChatRoom = function() {
+    startChatTypewriter();
+}
+function closeChatRoom() {
     document.getElementById('wa-chat-view').classList.remove('active');
     document.getElementById('wa-list-view').classList.add('active');
-};
+    if (typingInterval) clearInterval(typingInterval);
+}
+function startChatTypewriter() {
+    const container = document.querySelector('.wa-messages-container');
+    container.innerHTML = ''; 
+    const text = "Hi Mika,\n\nHappy Birthday yang ke-26! 🎉\n\nSemoga semua impianmu tercapai, makin cantik, makin pintar, dan bahagia selalu. Terima kasih sudah jadi bagian terindah di hidupku. I love you! ❤️";
+    
+    let words = text.split(' ');
+    let i = 0;
+    let currentText = '';
+    
+    // Langsung muncul satu bubble (karena user minta 'seperti awal fungsinya' yang berarti bubble muncul, tapi dengan efek ketik di dalamnya)
+    const bubble = document.createElement('div');
+    bubble.className = 'msg-bubble msg-in';
+    bubble.style.marginTop = '10px';
+    container.appendChild(bubble);
 
-// --- Camera ---
-function initCamera() { resetCameraState(); }
+    // Efek ketik huruf per huruf di dalam bubble
+    let charIndex = 0;
+    typingInterval = setInterval(() => {
+        if(charIndex < text.length) {
+            currentText += text.charAt(charIndex);
+            bubble.innerText = currentText;
+            charIndex++;
+            container.scrollTop = container.scrollHeight;
+        } else {
+            clearInterval(typingInterval);
+        }
+    }, 30);
+}
+
+// --- CAMERA LOGIC ---
+function initCamera() {
+    resetCameraState();
+}
 
 function resetCameraState() {
     currentPhotoIndex = 0;
@@ -146,310 +163,286 @@ function resetCameraState() {
     const display = document.getElementById('camera-main-display');
     display.innerHTML = '<div class="initial-text">Tap Shutter to Capture</div>';
     document.getElementById('gallery-thumb').style.opacity = '0';
-    
-    document.getElementById('shutter-trigger').classList.remove('disabled');
+    const btn = document.getElementById('shutter-trigger');
+    btn.classList.remove('disabled');
     closeGalleryOverlay();
 }
 
-window.takePhoto = function() {
-    if(isGalleryOpen) return;
-    if(currentPhotoIndex >= photos.length) {
-        document.getElementById('camera-main-display').innerHTML = '<div class="initial-text">All Captured! Check Gallery 👈</div>';
+function takePhoto() {
+    if (isGalleryOpen) return; 
+
+    if (currentPhotoIndex >= photos.length) {
+        const display = document.getElementById('camera-main-display');
+        display.innerHTML = '<div class="initial-text" style="font-size:16px; font-weight:bold;">All Captured! Check Gallery 👈</div>';
         return;
     }
 
-    // Flash
     const flash = document.getElementById('camera-flash');
     flash.style.opacity = '1';
-    setTimeout(() => flash.style.opacity = '0', 100);
+    setTimeout(() => { flash.style.opacity = '0'; }, 100);
 
-    // Render Foto
     const data = photos[currentPhotoIndex];
     lastCapturedPhoto = data;
     const display = document.getElementById('camera-main-display');
     
-    display.innerHTML = `<img src="${data.image}" style="width:100%;height:100%;object-fit:cover;"><div class="photo-caption-overlay">${data.text}</div>`;
-    
-    // Update Thumb
-    document.getElementById('gallery-thumb').src = data.image;
-    document.getElementById('gallery-thumb').style.opacity = '1';
-    
-    // Masukkan ke Gallery Grid
-    const grid = document.getElementById('gallery-grid-content');
-    const item = document.createElement('div');
-    item.className = 'gallery-item';
-    item.innerHTML = `<img src="${data.image}">`;
-    grid.appendChild(item);
+    display.innerHTML = `
+        <img src="${data.image}" style="width:100%; height:100%; object-fit:cover;">
+        <div class="photo-caption-overlay">${data.text}</div>
+    `;
 
-    // Reset screen after 1.2s
+    const thumb = document.getElementById('gallery-thumb');
+    thumb.src = data.image;
+    thumb.style.opacity = '1';
+
     if(cameraPhotoTimeout) clearTimeout(cameraPhotoTimeout);
-    cameraPhotoTimeout = setTimeout(() => { display.innerHTML = ''; }, 1200);
+    cameraPhotoTimeout = setTimeout(() => {
+        display.innerHTML = ''; 
+    }, 1200); 
 
     currentPhotoIndex++;
-};
+}
 
-window.openGalleryOverlay = function() {
-    if(lastCapturedPhoto) {
+function openGalleryOverlay() {
+    if (lastCapturedPhoto) {
         isGalleryOpen = true;
-        document.getElementById('shutter-trigger').classList.add('disabled');
+        document.getElementById('shutter-trigger').classList.add('disabled'); 
         document.getElementById('gallery-full-img').src = lastCapturedPhoto.image;
         document.getElementById('gallery-overlay').classList.add('active');
     }
-};
+}
 
-window.closeGalleryOverlay = function() {
+function closeGalleryOverlay() {
     isGalleryOpen = false;
-    document.getElementById('shutter-trigger').classList.remove('disabled');
+    document.getElementById('shutter-trigger').classList.remove('disabled'); 
     document.getElementById('gallery-overlay').classList.remove('active');
-};
+}
 
-window.openGalleryView = function() { openGalleryOverlay(); };
-window.closeGalleryView = function() { closeGalleryOverlay(); };
-
-// --- Spotify ---
+// --- SPOTIFY LOGIC ---
 function renderLibrary() {
     const list = document.getElementById('spotify-playlist-list');
     list.innerHTML = '';
     Object.keys(playlists).forEach(key => {
         const pl = playlists[key];
-        list.innerHTML += `<div class="playlist-item" onclick="openPlaylist('${key}')">
+        const item = document.createElement('div');
+        item.className = 'playlist-item';
+        item.onclick = () => openPlaylist(key);
+        item.innerHTML = `
             <div class="playlist-thumb" style="background:${pl.color}"><i class="${pl.icon}" style="color:white"></i></div>
             <div class="playlist-info"><h4>${pl.title}</h4><p>${pl.desc}</p></div>
-        </div>`;
+        `;
+        list.appendChild(item);
     });
 }
 
-window.openPlaylist = function(key) {
+function openPlaylist(key) {
     const pl = playlists[key];
     currentPlaylist = pl.songs;
-    
     document.getElementById('pl-title').textContent = pl.title;
+    document.getElementById('pl-desc').textContent = pl.desc;
     document.getElementById('pl-cover-art').style.background = pl.color;
     document.getElementById('pl-cover-art').innerHTML = `<i class="${pl.icon}"></i>`;
-    
+    document.getElementById('pl-play-big').onclick = () => playSong(0);
+
     const songList = document.getElementById('pl-song-list');
     songList.innerHTML = '';
     pl.songs.forEach((song, idx) => {
-        songList.innerHTML += `<div class="song-row" onclick="playSong(${idx})">
+        const row = document.createElement('div');
+        row.className = 'song-row';
+        row.onclick = () => playSong(idx);
+        row.innerHTML = `
             <div class="song-left"><div class="s-title">${song.title}</div><div class="s-artist">${song.artist}</div></div>
-        </div>`;
+            <i class="fas fa-ellipsis-h" style="color:#b3b3b3"></i>
+        `;
+        songList.appendChild(row);
     });
-
     document.getElementById('spotify-library-view').classList.remove('active');
     document.getElementById('spotify-playlist-view').classList.add('active');
-};
+}
 
-window.closePlaylist = function() {
+function closePlaylist() {
     document.getElementById('spotify-playlist-view').classList.remove('active');
     document.getElementById('spotify-library-view').classList.add('active');
-};
+}
 
-window.playSong = function(index) {
+function playSong(index) {
+    if(currentPlaylist.length === 0) return;
+    currentSongIndex = index;
     const song = currentPlaylist[index];
     const audio = document.getElementById('audio-player');
     audio.src = song.src;
-    audio.play().catch(() => alert("Gagal memutar lagu. Cek file audio!"));
     
-    document.getElementById('np-title-mini').textContent = song.title;
-    document.getElementById('np-play-btn-mini').className = 'fas fa-pause';
-    isPlaying = true;
-};
+    audio.play().then(() => {
+        isPlaying = true;
+        updateMiniPlayer(song);
+    }).catch(e => {
+        console.log("Audio error:", e);
+        alert("File lagu tidak ditemukan. Pastikan path lokal benar.");
+    });
+}
 
-window.togglePlay = function() {
+function togglePlay() {
     const audio = document.getElementById('audio-player');
-    if(isPlaying) { 
-        audio.pause(); 
-        isPlaying = false; 
-        document.getElementById('np-play-btn-mini').className = 'fas fa-play';
-    } else if(audio.src) { 
-        audio.play(); 
-        isPlaying = true; 
-        document.getElementById('np-play-btn-mini').className = 'fas fa-pause';
-    }
-};
+    if(isPlaying) { audio.pause(); isPlaying = false; updatePlayIcons(false); } 
+    else { if(audio.src) { audio.play(); isPlaying = true; updatePlayIcons(true); } }
+}
 
-// ==========================================
-// BAGIAN 3: TETRIS & CONTROLS
-// ==========================================
+function updateMiniPlayer(song) {
+    document.getElementById('np-title-mini').textContent = song.title;
+    document.getElementById('np-artist-mini').textContent = song.artist;
+    updatePlayIcons(true);
+}
 
+function updatePlayIcons(isPlayingNow) {
+    const icon = isPlayingNow ? 'fas fa-pause' : 'fas fa-play';
+    document.getElementById('np-play-btn-mini').className = icon;
+}
+
+// --- TETRIS LOGIC (12x12 GRID FIXED) ---
 function initTetris() {
     const canvas = document.getElementById('tetris-canvas');
     const container = document.querySelector('.tetris-game-container');
     
-    // Paksa ukuran agar tidak 0
-    const width = container.clientWidth || 300;
-    const height = container.clientHeight || 600;
+    const width = container.clientWidth;
+    const height = container.clientHeight;
     
     canvas.width = width;
     canvas.height = height;
     
-    const rows = 20;
-    const blockSize = Math.floor(height / rows);
-    const cols = Math.floor(width / blockSize);
+    // KONFIGURASI 12x12
+    const rows = 12; 
+    const cols = 12;
     
-    if(!tetrisGame) {
-        tetrisGame = { ctx: canvas.getContext('2d'), cols, rows, board: [], blockSize, score: 0, level: 1, running: false, current: null, width, height };
+    // Hitung block size agar muat (ambil yang lebih kecil agar tidak overflow)
+    const blockSizeY = height / rows;
+    const blockSizeX = width / cols;
+    const blockSize = Math.min(blockSizeX, blockSizeY);
+    
+    if (!tetrisGame) {
+        tetrisGame = { ctx: canvas.getContext('2d'), cols: cols, rows: rows, board: [], blockSize: blockSize, score: 0, level: 1, running: false, current: null, canvasWidth: width, canvasHeight: height };
     } else {
-        tetrisGame.ctx = canvas.getContext('2d');
         tetrisGame.blockSize = blockSize;
+        tetrisGame.cols = cols;
+        tetrisGame.rows = rows;
+        tetrisGame.canvasWidth = width;
+        tetrisGame.canvasHeight = height;
+        tetrisGame.ctx = canvas.getContext('2d');
     }
 }
 
 function resetTetris() {
     if(!tetrisGame) initTetris();
     
-    // Reset Board
-    for(let r=0; r<tetrisGame.rows; r++) {
-        tetrisGame.board[r] = [];
-        for(let c=0; c<tetrisGame.cols; c++) tetrisGame.board[r][c] = 0;
+    // Reset Board 12x12
+    tetrisGame.board = [];
+    for(let r=0;r<tetrisGame.rows;r++){
+        tetrisGame.board[r]=[];
+        for(let c=0;c<tetrisGame.cols;c++) tetrisGame.board[r][c]=0;
     }
     
-    tetrisGame.score = 0;
-    document.getElementById('score').textContent = '0';
-    tetrisGame.running = true;
-    tetrisGame.current = newPiece();
+    tetrisGame.score=0; 
+    tetrisGame.level=1;
+    document.getElementById('score').textContent='0';
+    tetrisGame.running=true;
+    tetrisGame.current=newPiece();
+    dropStart=Date.now();
     loopTetris();
 }
+function pauseTetris(){ if(tetrisGame) tetrisGame.running=false; }
 
-function pauseTetris() { if(tetrisGame) tetrisGame.running = false; }
+const PIECES=[[[[1,1,0],[0,1,1]],"#FF3B30"],[[[0,1,1],[1,1,0]],"#34C759"],[[[0,1,0],[1,1,1]],"#AF52DE"],[[[1,1],[1,1]],"#FFD60A"],[[[0,0,1],[1,1,1]],"#FF9500"],[[[1,1,1,1]],"#30B0C7"],[[[1,0,0],[1,1,1]],"#007AFF"]];
 
-const PIECES = [
-    [[[1,1,0],[0,1,1]], "#FF3B30"], 
-    [[[0,1,1],[1,1,0]], "#34C759"], 
-    [[[0,1,0],[1,1,1]], "#AF52DE"], 
-    [[[1,1],[1,1]], "#FFD60A"], 
-    [[[0,0,1],[1,1,1]], "#FF9500"], 
-    [[[1,1,1,1]], "#30B0C7"], 
-    [[[1,0,0],[1,1,1]], "#007AFF"]
-];
-
-function newPiece() {
-    const r = Math.floor(Math.random() * PIECES.length);
-    const startX = Math.floor(tetrisGame.cols / 2) - 1;
-    return { shape: PIECES[r][0], color: PIECES[r][1], x: startX, y: -2 };
+function newPiece(){
+    const r=Math.floor(Math.random()*PIECES.length);
+    // Spawn Center
+    const startX = Math.floor((tetrisGame.cols / 2) - (PIECES[r][0][0].length / 2));
+    return{tetromino:PIECES[r][0],color:PIECES[r][1],x:startX,y:-2}
 }
 
-let lastTime = 0;
-function loopTetris(time = 0) {
-    if(!tetrisGame.running) return;
-    const dt = time - lastTime;
-    
-    // Speed logic (Makin level naik makin cepat)
-    const speed = Math.max(50, 400 - (tetrisGame.level * 30)); 
-    
-    if(dt > speed) {
-        moveDown();
-        lastTime = time;
-    }
-    
+let dropStart=Date.now();
+function loopTetris(){
+    if(!tetrisGame || !tetrisGame.running) return;
+    let now=Date.now();let delta=now-dropStart;
+    let speed = Math.max(50, 400 - (tetrisGame.level * 40));
+    if(delta > speed){ moveDown(); dropStart=Date.now(); }
     drawTetris();
     requestAnimationFrame(loopTetris);
 }
 
-function drawTetris() {
-    const { ctx, width, height, blockSize, cols, rows, board, current } = tetrisGame;
+function drawTetris(){
+    const{ctx,blockSize,board,current,cols,rows,canvasWidth,canvasHeight}=tetrisGame;
     
-    // Clear
-    ctx.fillStyle = "#111"; ctx.fillRect(0, 0, width, height);
-    
-    // Grid
-    ctx.strokeStyle = "rgba(255,255,255,0.05)"; ctx.lineWidth = 1;
-    for(let r=0; r<=rows; r++) { ctx.beginPath(); ctx.moveTo(0, r*blockSize); ctx.lineTo(width, r*blockSize); ctx.stroke(); }
-    for(let c=0; c<=cols; c++) { ctx.beginPath(); ctx.moveTo(c*blockSize, 0); ctx.lineTo(c*blockSize, height); ctx.stroke(); }
+    // Center game area
+    const gameWidth = cols * blockSize;
+    const gameHeight = rows * blockSize;
+    const offsetX = (canvasWidth - gameWidth) / 2;
+    const offsetY = (canvasHeight - gameHeight) / 2;
 
-    // Board
-    for(let r=0; r<rows; r++) {
-        for(let c=0; c<cols; c++) {
-            if(board[r][c]) drawBlock(c, r, board[r][c]);
-        }
-    }
+    ctx.fillStyle="#111"; ctx.fillRect(0,0,canvasWidth,canvasHeight);
     
-    // Active Piece
-    if(current) {
-        for(let r=0; r<current.shape.length; r++) {
-            for(let c=0; c<current.shape[r].length; c++) {
-                if(current.shape[r][c]) drawBlock(current.x + c, current.y + r, current.color);
-            }
-        }
+    // Gambar Grid Tajam
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.3)"; // Lebih Tajam (0.3)
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let c = 0; c <= cols; c++) {
+        ctx.moveTo(offsetX + c * blockSize, offsetY);
+        ctx.lineTo(offsetX + c * blockSize, offsetY + gameHeight);
     }
+    for (let r = 0; r <= rows; r++) {
+        ctx.moveTo(offsetX, offsetY + r * blockSize);
+        ctx.lineTo(offsetX + gameWidth, offsetY + r * blockSize);
+    }
+    ctx.stroke();
+    ctx.closePath();
+
+    // Draw Board
+    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++)if(board[r][c])drawBlock(offsetX+c*blockSize, offsetY+r*blockSize, board[r][c]);
+    // Draw Current
+    if(current)for(let r=0;r<current.tetromino.length;r++)for(let c=0;c<current.tetromino[r].length;c++)if(current.tetromino[r][c])drawBlock(offsetX+(current.x+c)*blockSize, offsetY+(current.y+r)*blockSize, current.color);
 }
 
-function drawBlock(x, y, color) {
-    const s = tetrisGame.blockSize;
-    tetrisGame.ctx.fillStyle = color;
-    tetrisGame.ctx.fillRect(x*s, y*s, s, s);
-    tetrisGame.ctx.strokeRect(x*s, y*s, s, s);
+function drawBlock(x,y,color){
+    const{ctx,blockSize}=tetrisGame;
+    ctx.fillStyle=color;
+    ctx.fillRect(x,y,blockSize,blockSize);
+    // Grid pada block tetap ada
+    ctx.strokeStyle="rgba(255,255,255,0.5)";
+    ctx.lineWidth=1;
+    ctx.strokeRect(x,y,blockSize,blockSize);
 }
 
-function moveDown() {
-    if(!checkCollision(0, 1)) {
+function moveDown(){
+    if(!collision(0,1,tetrisGame.current.tetromino)) {
         tetrisGame.current.y++;
     } else {
-        lockPiece();
-        tetrisGame.current = newPiece();
-        // Game Over Check
-        if(checkCollision(0, 0)) {
-            tetrisGame.running = false;
+        lock();
+        tetrisGame.current=newPiece();
+        if(collision(0,0,tetrisGame.current.tetromino)){
+            tetrisGame.running=false;
             document.getElementById('final-score').textContent = tetrisGame.score;
-            window.openModal('game-over-modal');
+            openModal('game-over-modal');
         }
     }
 }
-
-function checkCollision(ox, oy, shape) {
-    const p = tetrisGame.current;
-    const mat = shape || p.shape;
-    for(let r=0; r<mat.length; r++) {
-        for(let c=0; c<mat[r].length; c++) {
-            if(mat[r][c]) {
-                let newX = p.x + c + ox;
-                let newY = p.y + r + oy;
-                if(newX < 0 || newX >= tetrisGame.cols || newY >= tetrisGame.rows) return true;
-                if(newY >= 0 && tetrisGame.board[newY][newX]) return true;
-            }
+function moveLeft(){if(!tetrisGame.running)return;if(!collision(-1,0,tetrisGame.current.tetromino))tetrisGame.current.x--}
+function moveRight(){if(!tetrisGame.running)return;if(!collision(1,0,tetrisGame.current.tetromino))tetrisGame.current.x++}
+function rotate(){if(!tetrisGame.running)return;let nextPattern=tetrisGame.current.tetromino[0].map((val,index)=>tetrisGame.current.tetromino.map(row=>row[index]).reverse());if(!collision(0,0,nextPattern))tetrisGame.current.tetromino=nextPattern}
+function collision(x,y,piece){for(let r=0;r<piece.length;r++)for(let c=0;c<piece[r].length;c++){if(!piece[r][c])continue;let newX=tetrisGame.current.x+c+x;let newY=tetrisGame.current.y+r+y;if(newX<0||newX>=tetrisGame.cols||newY>=tetrisGame.rows)return true;if(newY<0)continue;if(tetrisGame.board[newY][newX])return true}return false}
+function lock(){
+    for(let r=0;r<tetrisGame.current.tetromino.length;r++)for(let c=0;c<tetrisGame.current.tetromino[r].length;c++){
+        if(!tetrisGame.current.tetromino[r][c])continue;
+        if(tetrisGame.current.y+r < 0) {
+            tetrisGame.running=false;
+            document.getElementById('final-score').textContent = tetrisGame.score;
+            openModal('game-over-modal');
+            return;
         }
+        if(tetrisGame.current.y+r>=0)tetrisGame.board[tetrisGame.current.y+r][tetrisGame.current.x+c]=tetrisGame.current.color;
     }
-    return false;
+    let lines=0;
+    for(let r=0;r<tetrisGame.rows;r++){let full=true;for(let c=0;c<tetrisGame.cols;c++)if(!tetrisGame.board[r][c])full=false;if(full){lines++;tetrisGame.board.splice(r,1);tetrisGame.board.unshift(new Array(tetrisGame.cols).fill(0))}}
+    if(lines>0){ tetrisGame.score+=lines*100; tetrisGame.level = Math.floor(tetrisGame.score / 300) + 1; document.getElementById('score').textContent=tetrisGame.score; }
 }
 
-function lockPiece() {
-    const p = tetrisGame.current;
-    for(let r=0; r<p.shape.length; r++) {
-        for(let c=0; c<p.shape[r].length; c++) {
-            if(p.shape[r][c]) {
-                if(p.y + r < 0) { // Menembus atas -> Game Over
-                    tetrisGame.running = false;
-                    window.openModal('game-over-modal');
-                    return;
-                }
-                tetrisGame.board[p.y + r][p.x + c] = p.color;
-            }
-        }
-    }
-    // Clear Lines
-    for(let r=0; r<tetrisGame.rows; r++) {
-        if(tetrisGame.board[r].every(val => val !== 0)) {
-            tetrisGame.board.splice(r, 1);
-            tetrisGame.board.unshift(new Array(tetrisGame.cols).fill(0));
-            tetrisGame.score += 100;
-            document.getElementById('score').textContent = tetrisGame.score;
-        }
-    }
-}
-
-// Controls
-document.getElementById('left-btn').onclick = () => { if(tetrisGame.running && !checkCollision(-1, 0)) tetrisGame.current.x--; drawTetris(); };
-document.getElementById('right-btn').onclick = () => { if(tetrisGame.running && !checkCollision(1, 0)) tetrisGame.current.x++; drawTetris(); };
-document.getElementById('down-btn').onclick = () => { if(tetrisGame.running) { moveDown(); drawTetris(); } };
-document.getElementById('rotate-btn').onclick = () => {
-    if(!tetrisGame.running) return;
-    const rotated = tetrisGame.current.shape[0].map((_, i) => tetrisGame.current.shape.map(row => row[i]).reverse());
-    if(!checkCollision(0, 0, rotated)) {
-        tetrisGame.current.shape = rotated;
-        drawTetris();
-    }
-};
-
-// Modals Helpers
-window.openModal = (id) => document.getElementById(id).classList.add('active');
-window.closeModal = (id) => document.getElementById(id).classList.remove('active');
+document.getElementById('left-btn').addEventListener('click',moveLeft);document.getElementById('right-btn').addEventListener('click',moveRight);document.getElementById('down-btn').addEventListener('click',moveDown);document.getElementById('rotate-btn').addEventListener('click',rotate);
+function openModal(id){document.getElementById(id).classList.add('active')}
+function closeModal(id){document.getElementById(id).classList.remove('active')}
