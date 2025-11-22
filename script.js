@@ -10,13 +10,13 @@ let cameraPhotoTimeout = null;
 
 // --- Setup Data Foto ---
 const photos = [
-    { text: 'Cantiknya Kebangetan 💕', image: './images/photo1.jpg' },
+    { text: 'Kecantikan yang Gak Pernah Gagal 💕', image: './images/photo1.jpg' },
     { text: 'Imutnya Bikin Lupa Dunia 🧸', image: './images/photo2.jpg' },
-    { text: 'Elegan ✨', image: './images/photo3.jpg' },
+    { text: 'Elegan Tanpa Usaha ✨', image: './images/photo3.jpg' },
     { text: 'Senyum yang Jadi Favorit Aku ❤️', image: './images/photo4.jpg' },
     { text: 'Pesona yang Susah Dilupain 🌹', image: './images/photo5.jpg' },
     { text: 'Cantik dari Sudut Mana Pun 📸', image: './images/photo6.jpg' },
-    { text: 'Manis Bikin Diabetes 🍯', image: './images/photo7.jpg' },
+    { text: 'Momen Manis Tanpa Kata 🍯', image: './images/photo7.jpg' },
     { text: 'Yang Aku Sayang Selamanya 💖', image: './images/photo8.jpg' }
 ];
 
@@ -58,7 +58,6 @@ const playlists = {
 let currentPlaylist = [];
 let currentSongIndex = 0;
 
-// --- BOOT ---
 document.addEventListener('DOMContentLoaded', () => {
     simulateBoot();
     updateClock();
@@ -68,9 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function updateClock() {
     const now = new Date();
-    const h = String(now.getHours()).padStart(2, '0');
-    const m = String(now.getMinutes()).padStart(2, '0');
-    document.getElementById('clock').textContent = `${h}:${m}`;
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    document.getElementById('clock').textContent = `${hours}:${minutes}`;
 }
 
 function simulateBoot() {
@@ -98,11 +97,15 @@ function openApp(appName) {
 }
 
 function goHome() {
-    document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.app-screen').forEach(screen => {
+        screen.classList.remove('active');
+    });
     document.getElementById('home-screen').classList.add('active');
+
     if (currentApp === 'whatsapp') closeChatRoom();
     if (currentApp === 'tetris') pauseTetris();
     if (currentApp === 'camera') resetCameraState();
+    
     currentApp = null;
 }
 
@@ -132,7 +135,7 @@ function startChatTypewriter() {
         const timeSpan = document.createElement('span');
         timeSpan.className = 'msg-time';
         const now = new Date();
-        timeSpan.innerText = `${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+        timeSpan.textContent = `${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
         bubble.appendChild(timeSpan);
         container.appendChild(bubble);
         let charIndex = 0;
@@ -153,26 +156,33 @@ function startChatTypewriter() {
 }
 
 // --- CAMERA LOGIC ---
-function initCamera() { resetCameraState(); }
+function initCamera() {
+    resetCameraState();
+}
 
 function resetCameraState() {
     currentPhotoIndex = 0;
     lastCapturedPhoto = null;
     isGalleryOpen = false;
     if(cameraPhotoTimeout) clearTimeout(cameraPhotoTimeout);
+    
     const display = document.getElementById('camera-main-display');
     display.innerHTML = '<div class="initial-text">Tap Shutter to Capture</div>';
     document.getElementById('gallery-thumb').style.opacity = '0';
-    document.getElementById('shutter-trigger').classList.remove('disabled');
+    const btn = document.getElementById('shutter-trigger');
+    btn.classList.remove('disabled');
     closeGalleryOverlay();
 }
 
 function takePhoto() {
     if (isGalleryOpen) return; 
+
     if (currentPhotoIndex >= photos.length) {
-        document.getElementById('camera-main-display').innerHTML = '<div class="initial-text" style="font-size:16px; font-weight:bold;">All Captured! Check Gallery 👈</div>';
+        const display = document.getElementById('camera-main-display');
+        display.innerHTML = '<div class="initial-text" style="font-size:16px; font-weight:bold;">All Captured! Check Gallery 👈</div>';
         return;
     }
+
     const flash = document.getElementById('camera-flash');
     flash.style.opacity = '1';
     setTimeout(() => { flash.style.opacity = '0'; }, 100);
@@ -180,20 +190,21 @@ function takePhoto() {
     const data = photos[currentPhotoIndex];
     lastCapturedPhoto = data;
     const display = document.getElementById('camera-main-display');
-    display.innerHTML = `<img src="${data.image}" style="width:100%; height:100%; object-fit:cover;"><div class="photo-caption-overlay">${data.text}</div>`;
+    
+    display.innerHTML = `
+        <img src="${data.image}" style="width:100%; height:100%; object-fit:cover;">
+        <div class="photo-caption-overlay">${data.text}</div>
+    `;
+
     const thumb = document.getElementById('gallery-thumb');
     thumb.src = data.image;
     thumb.style.opacity = '1';
-    
-    // Add to gallery grid logic could be here
-    const grid = document.getElementById('gallery-grid-content');
-    const newItem = document.createElement('div');
-    newItem.className = 'gallery-item';
-    newItem.innerHTML = `<img src="${data.image}">`;
-    grid.appendChild(newItem);
 
     if(cameraPhotoTimeout) clearTimeout(cameraPhotoTimeout);
-    cameraPhotoTimeout = setTimeout(() => { display.innerHTML = ''; }, 1200); 
+    cameraPhotoTimeout = setTimeout(() => {
+        display.innerHTML = ''; 
+    }, 1200); 
+
     currentPhotoIndex++;
 }
 
@@ -218,10 +229,14 @@ function renderLibrary() {
     list.innerHTML = '';
     Object.keys(playlists).forEach(key => {
         const pl = playlists[key];
-        list.innerHTML += `<div class="playlist-item" onclick="openPlaylist('${key}')">
+        const item = document.createElement('div');
+        item.className = 'playlist-item';
+        item.onclick = () => openPlaylist(key);
+        item.innerHTML = `
             <div class="playlist-thumb" style="background:${pl.color}"><i class="${pl.icon}" style="color:white"></i></div>
             <div class="playlist-info"><h4>${pl.title}</h4><p>${pl.desc}</p></div>
-        </div>`;
+        `;
+        list.appendChild(item);
     });
 }
 
@@ -237,10 +252,14 @@ function openPlaylist(key) {
     const songList = document.getElementById('pl-song-list');
     songList.innerHTML = '';
     pl.songs.forEach((song, idx) => {
-        songList.innerHTML += `<div class="song-row" onclick="playSong(${idx})">
+        const row = document.createElement('div');
+        row.className = 'song-row';
+        row.onclick = () => playSong(idx);
+        row.innerHTML = `
             <div class="song-left"><div class="s-title">${song.title}</div><div class="s-artist">${song.artist}</div></div>
             <i class="fas fa-ellipsis-h" style="color:#b3b3b3"></i>
-        </div>`;
+        `;
+        songList.appendChild(row);
     });
     document.getElementById('spotify-library-view').classList.remove('active');
     document.getElementById('spotify-playlist-view').classList.add('active');
@@ -253,13 +272,18 @@ function closePlaylist() {
 
 function playSong(index) {
     if(currentPlaylist.length === 0) return;
+    currentSongIndex = index;
     const song = currentPlaylist[index];
     const audio = document.getElementById('audio-player');
     audio.src = song.src;
+    
     audio.play().then(() => {
         isPlaying = true;
         updateMiniPlayer(song);
-    }).catch(e => { console.log("Audio Error:", e); alert("File audio tidak ditemukan."); });
+    }).catch(e => {
+        console.log("Audio error:", e);
+        alert("File lagu tidak ditemukan. Pastikan path lokal benar.");
+    });
 }
 
 function togglePlay() {
@@ -274,44 +298,67 @@ function updateMiniPlayer(song) {
     updatePlayIcons(true);
 }
 
-function updatePlayIcons(state) {
-    document.getElementById('np-play-btn-mini').className = state ? 'fas fa-pause' : 'fas fa-play';
+function updatePlayIcons(isPlayingNow) {
+    const icon = isPlayingNow ? 'fas fa-pause' : 'fas fa-play';
+    document.getElementById('np-play-btn-mini').className = icon;
 }
 
 // --- TETRIS LOGIC ---
 function initTetris() {
     const canvas = document.getElementById('tetris-canvas');
     const container = document.querySelector('.tetris-game-container');
-    const width = container.clientWidth || 300;
-    const height = container.clientHeight || 600;
+    const width = container.clientWidth > 0 ? container.clientWidth : 300;
+    const height = container.clientHeight > 0 ? container.clientHeight : 600;
     canvas.width = width; canvas.height = height;
+    
     const rows = 12; const cols = 12;
-    const blockSize = Math.floor(width / cols); // Square cells
+    const blockSizeY = height / rows;
+    const blockSizeX = width / cols;
+    const blockSize = Math.min(blockSizeX, blockSizeY);
     
     if (!tetrisGame) {
-        tetrisGame = { ctx: canvas.getContext('2d'), cols, rows, board: [], blockSize, score: 0, level: 1, running: false, current: null, width, height };
+        tetrisGame = { ctx: canvas.getContext('2d'), cols: cols, rows: rows, board: [], blockSize: blockSize, score: 0, level: 1, running: false, current: null, canvasWidth: width, canvasHeight: height };
     } else {
-        tetrisGame.blockSize = blockSize; tetrisGame.width = width; tetrisGame.height = height; tetrisGame.ctx = canvas.getContext('2d');
+        tetrisGame.blockSize = blockSize;
+        tetrisGame.cols = cols;
+        tetrisGame.rows = rows;
+        tetrisGame.canvasWidth = width;
+        tetrisGame.canvasHeight = height;
+        tetrisGame.ctx = canvas.getContext('2d');
     }
 }
 
 function resetTetris() {
     if(!tetrisGame) initTetris();
-    for(let r=0;r<tetrisGame.rows;r++){ tetrisGame.board[r]=[]; for(let c=0;c<tetrisGame.cols;c++) tetrisGame.board[r][c]=0; }
-    tetrisGame.score=0; tetrisGame.level=1;
+    
+    // Reset Board
+    for(let r=0;r<tetrisGame.rows;r++){
+        tetrisGame.board[r]=[];
+        for(let c=0;c<tetrisGame.cols;c++) tetrisGame.board[r][c]=0;
+    }
+    
+    tetrisGame.score=0; 
+    tetrisGame.level=1;
     document.getElementById('score').textContent='0';
-    tetrisGame.running=true; tetrisGame.current=newPiece();
-    dropStart=Date.now(); loopTetris();
+    tetrisGame.running=true;
+    tetrisGame.current=newPiece();
+    dropStart=Date.now();
+    loopTetris();
 }
 function pauseTetris(){ if(tetrisGame) tetrisGame.running=false; }
 
 const PIECES=[[[[1,1,0],[0,1,1]],"#FF3B30"],[[[0,1,1],[1,1,0]],"#34C759"],[[[0,1,0],[1,1,1]],"#AF52DE"],[[[1,1],[1,1]],"#FFD60A"],[[[0,0,1],[1,1,1]],"#FF9500"],[[[1,1,1,1]],"#30B0C7"],[[[1,0,0],[1,1,1]],"#007AFF"]];
-function newPiece(){ const r=Math.floor(Math.random()*PIECES.length); const startX = Math.floor((tetrisGame.cols / 2) - 1); return{tetromino:PIECES[r][0],color:PIECES[r][1],x:startX,y:-2}; }
+
+function newPiece(){
+    const r=Math.floor(Math.random()*PIECES.length);
+    const startX = Math.floor((tetrisGame.cols / 2) - (PIECES[r][0][0].length / 2));
+    return{tetromino:PIECES[r][0],color:PIECES[r][1],x:startX,y:-2}
+}
 
 let dropStart=Date.now();
 function loopTetris(){
     if(!tetrisGame || !tetrisGame.running) return;
-    let now=Date.now(); let delta=now-dropStart;
+    let now=Date.now();let delta=now-dropStart;
     let speed = Math.max(50, 400 - (tetrisGame.level * 40));
     if(delta > speed){ moveDown(); dropStart=Date.now(); }
     drawTetris();
@@ -319,89 +366,79 @@ function loopTetris(){
 }
 
 function drawTetris(){
-    const{ctx,blockSize,board,current,cols,rows,width,height}=tetrisGame;
-    const gameW = cols * blockSize; const gameH = rows * blockSize;
-    const offX = (width - gameW)/2; const offY = (height - gameH)/2;
+    const{ctx,blockSize,board,current,cols,rows,canvasWidth,canvasHeight}=tetrisGame;
     
-    ctx.fillStyle="#111"; ctx.fillRect(0,0,width,height);
+    // Center game area
+    const gameWidth = cols * blockSize;
+    const gameHeight = rows * blockSize;
+    const offsetX = (canvasWidth - gameWidth) / 2;
+    const offsetY = (canvasHeight - gameHeight) / 2;
+
+    ctx.fillStyle="#111"; ctx.fillRect(0,0,canvasWidth,canvasHeight);
+    
     // Grid
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.3)"; ctx.lineWidth = 1;
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.3)"; 
+    ctx.lineWidth = 1;
     ctx.beginPath();
-    for(let c=0;c<=cols;c++) { ctx.moveTo(offX+c*blockSize, offY); ctx.lineTo(offX+c*blockSize, offY+gameH); }
-    for(let r=0;r<=rows;r++) { ctx.moveTo(offX, offY+r*blockSize); ctx.lineTo(offX+gameW, offY+r*blockSize); }
+    for (let c = 0; c <= cols; c++) {
+        ctx.moveTo(offsetX + c * blockSize, offsetY);
+        ctx.lineTo(offsetX + c * blockSize, offsetY + gameHeight);
+    }
+    for (let r = 0; r <= rows; r++) {
+        ctx.moveTo(offsetX, offsetY + r * blockSize);
+        ctx.lineTo(offsetX + gameWidth, offsetY + r * blockSize);
+    }
     ctx.stroke();
-    
-    // Blocks
-    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++)if(board[r][c])drawBlock(offX+c*blockSize, offY+r*blockSize, board[r][c]);
-    if(current)for(let r=0;r<current.tetromino.length;r++)for(let c=0;c<current.tetromino[r].length;c++)if(current.tetromino[r][c])drawBlock(offX+(current.x+c)*blockSize, offY+(current.y+r)*blockSize, current.color);
+    ctx.closePath();
+
+    // Board
+    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++)if(board[r][c])drawBlock(offsetX+c*blockSize, offsetY+r*blockSize, board[r][c]);
+    // Current
+    if(current)for(let r=0;r<current.tetromino.length;r++)for(let c=0;c<current.tetromino[r].length;c++)if(current.tetromino[r][c])drawBlock(offsetX+(current.x+c)*blockSize, offsetY+(current.y+r)*blockSize, current.color);
 }
 
 function drawBlock(x,y,color){
-    const s = tetrisGame.blockSize;
-    tetrisGame.ctx.fillStyle=color; tetrisGame.ctx.fillRect(x,y,s,s);
-    tetrisGame.ctx.strokeStyle="rgba(255,255,255,0.5)"; tetrisGame.ctx.strokeRect(x,y,s,s);
+    const{ctx,blockSize}=tetrisGame;
+    ctx.fillStyle=color;
+    ctx.fillRect(x,y,blockSize,blockSize);
+    ctx.strokeStyle="rgba(255,255,255,0.5)";
+    ctx.lineWidth=1;
+    ctx.strokeRect(x,y,blockSize,blockSize);
 }
 
 function moveDown(){
-    if(!collision(0,1)) { tetrisGame.current.y++; } 
-    else {
-        lock(); 
+    if(!collision(0,1,tetrisGame.current.tetromino)) {
+        tetrisGame.current.y++;
+    } else {
+        lock();
         tetrisGame.current=newPiece();
-        if(collision(0,0)) { tetrisGame.running=false; document.getElementById('final-score').textContent=tetrisGame.score; openModal('game-over-modal'); }
-    }
-}
-function moveLeft(){ if(tetrisGame.running && !collision(-1,0)) tetrisGame.current.x--; }
-function moveRight(){ if(tetrisGame.running && !collision(1,0)) tetrisGame.current.x++; }
-function rotate(){ 
-    if(!tetrisGame.running) return;
-    let next = tetrisGame.current.tetromino[0].map((_,i) => tetrisGame.current.tetromino.map(row => row[i]).reverse());
-    let old = tetrisGame.current.tetromino;
-    tetrisGame.current.tetromino = next;
-    if(collision(0,0)) tetrisGame.current.tetromino = old;
-}
-
-function collision(ox, oy) {
-    const p = tetrisGame.current;
-    for(let r=0; r<p.tetromino.length; r++) {
-        for(let c=0; c<p.tetromino[r].length; c++) {
-            if(p.tetromino[r][c]) {
-                let newX = p.x + c + ox;
-                let newY = p.y + r + oy;
-                if(newX < 0 || newX >= tetrisGame.cols || newY >= tetrisGame.rows) return true;
-                if(newY >= 0 && tetrisGame.board[newY][newX]) return true;
-            }
-        }
-    }
-    return false;
-}
-
-function lock() {
-    const p = tetrisGame.current;
-    for(let r=0; r<p.tetromino.length; r++) {
-        for(let c=0; c<p.tetromino[r].length; c++) {
-            if(p.tetromino[r][c]) {
-                if(p.y+r < 0) { tetrisGame.running=false; openModal('game-over-modal'); return; }
-                tetrisGame.board[p.y+r][p.x+c] = p.color;
-            }
-        }
-    }
-    // Clear
-    for(let r=0; r<tetrisGame.rows; r++) {
-        if(tetrisGame.board[r].every(v => v!==0)) {
-            tetrisGame.board.splice(r,1);
-            tetrisGame.board.unshift(Array(tetrisGame.cols).fill(0));
-            tetrisGame.score += 100;
-            document.getElementById('score').textContent = tetrisGame.score;
+        if(collision(0,0,tetrisGame.current.tetromino)){
+            tetrisGame.running=false;
+            document.getElementById('final-score').textContent = tetrisGame.score;
+            openModal('game-over-modal');
         }
     }
 }
+function moveLeft(){if(!tetrisGame.running)return;if(!collision(-1,0,tetrisGame.current.tetromino))tetrisGame.current.x--}
+function moveRight(){if(!tetrisGame.running)return;if(!collision(1,0,tetrisGame.current.tetromino))tetrisGame.current.x++}
+function rotate(){if(!tetrisGame.running)return;let nextPattern=tetrisGame.current.tetromino[0].map((val,index)=>tetrisGame.current.tetromino.map(row=>row[index]).reverse());if(!collision(0,0,nextPattern))tetrisGame.current.tetromino=nextPattern}
+function collision(x,y,piece){for(let r=0;r<piece.length;r++)for(let c=0;c<piece[r].length;c++){if(!piece[r][c])continue;let newX=tetrisGame.current.x+c+x;let newY=tetrisGame.current.y+r+y;if(newX<0||newX>=tetrisGame.cols||newY>=tetrisGame.rows)return true;if(newY<0)continue;if(tetrisGame.board[newY][newX])return true}return false}
+function lock(){
+    for(let r=0;r<tetrisGame.current.tetromino.length;r++)for(let c=0;c<tetrisGame.current.tetromino[r].length;c++){
+        if(!tetrisGame.current.tetromino[r][c])continue;
+        if(tetrisGame.current.y+r < 0) {
+            tetrisGame.running=false;
+            document.getElementById('final-score').textContent = tetrisGame.score;
+            openModal('game-over-modal');
+            return;
+        }
+        if(tetrisGame.current.y+r>=0)tetrisGame.board[tetrisGame.current.y+r][tetrisGame.current.x+c]=tetrisGame.current.color;
+    }
+    let lines=0;
+    for(let r=0;r<tetrisGame.rows;r++){let full=true;for(let c=0;c<tetrisGame.cols;c++)if(!tetrisGame.board[r][c])full=false;if(full){lines++;tetrisGame.board.splice(r,1);tetrisGame.board.unshift(new Array(tetrisGame.cols).fill(0))}}
+    if(lines>0){ tetrisGame.score+=lines*100; tetrisGame.level = Math.floor(tetrisGame.score / 300) + 1; document.getElementById('score').textContent=tetrisGame.score; }
+}
 
-// Controls
-document.getElementById('left-btn').addEventListener('click',moveLeft);
-document.getElementById('right-btn').addEventListener('click',moveRight);
-document.getElementById('down-btn').addEventListener('click',moveDown);
-document.getElementById('rotate-btn').addEventListener('click',rotate);
-
-// Modals
+document.getElementById('left-btn').addEventListener('click',moveLeft);document.getElementById('right-btn').addEventListener('click',moveRight);document.getElementById('down-btn').addEventListener('click',moveDown);document.getElementById('rotate-btn').addEventListener('click',rotate);
 function openModal(id){document.getElementById(id).classList.add('active')}
 function closeModal(id){document.getElementById(id).classList.remove('active')}
