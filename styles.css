@@ -1,6 +1,4 @@
 /* Reset & Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
 * {
     margin: 0;
     padding: 0;
@@ -10,7 +8,7 @@
 }
 
 body {
-    background: #121212; /* Dark background for presentation */
+    background: #121212;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -19,17 +17,17 @@ body {
     overflow: hidden;
 }
 
-/* iPhone 16 Pro Max - Titanium Desert Chassis */
+/* iPhone 16 Pro Max Chassis */
 .iphone-body {
-    width: 380px; /* Approx scale */
+    width: 380px;
     height: 780px;
-    background: linear-gradient(145deg, #d2c4b5, #bfae9e); /* Desert Titanium shade */
+    background: linear-gradient(145deg, #d2c4b5, #bfae9e); /* Titanium Desert */
     border-radius: 55px;
     position: relative;
     box-shadow: 
-        0 0 0 2px #a8998d, /* Inner frame ring */
-        0 0 0 4px #4a4a4a, /* Outer dark frame */
-        0 20px 50px rgba(0,0,0,0.5);
+        0 0 0 2px #a8998d,
+        0 0 0 4px #4a4a4a,
+        0 30px 60px rgba(0,0,0,0.6);
     padding: 14px;
     z-index: 1;
 }
@@ -41,7 +39,7 @@ body {
     border-radius: 44px;
     position: relative;
     overflow: hidden;
-    /* Masking to round corners of content */
+    mask-image: radial-gradient(white, black);
     -webkit-mask-image: -webkit-radial-gradient(white, black);
 }
 
@@ -49,27 +47,18 @@ body {
 .side-btn {
     position: absolute;
     background: #9c8c7e;
-    border-radius: 4px 0 0 4px;
-    left: -6px;
+    left: -4px;
     z-index: 0;
-    box-shadow: inset -2px 0 2px rgba(0,0,0,0.2);
 }
-.side-btn.power {
-    right: -6px;
-    left: auto;
-    top: 200px;
-    width: 6px;
-    height: 90px;
-    border-radius: 0 4px 4px 0;
-}
-.side-btn.volume-up { top: 150px; width: 6px; height: 50px; }
-.side-btn.volume-down { top: 215px; width: 6px; height: 50px; }
-.side-btn.action-btn-hw { top: 100px; width: 6px; height: 30px; }
+.side-btn.power { right: -4px; left: auto; top: 200px; width: 4px; height: 90px; border-radius: 0 2px 2px 0; }
+.side-btn.volume-up { top: 150px; width: 4px; height: 50px; border-radius: 2px 0 0 2px; }
+.side-btn.volume-down { top: 215px; width: 4px; height: 50px; border-radius: 2px 0 0 2px; }
+.side-btn.action-btn-hw { top: 100px; width: 4px; height: 30px; border-radius: 2px 0 0 2px; }
 
 /* Dynamic Island */
 .dynamic-island {
     position: absolute;
-    top: 10px;
+    top: 11px;
     left: 50%;
     transform: translateX(-50%);
     width: 120px;
@@ -81,22 +70,21 @@ body {
     justify-content: flex-end;
     align-items: center;
     padding-right: 10px;
-    transition: all 0.3s ease;
 }
 .camera-hole {
     width: 12px;
     height: 12px;
     background: #1a1a1a;
     border-radius: 50%;
-    box-shadow: inset 0 0 4px rgba(255,255,255,0.1);
+    box-shadow: inset 0 0 4px rgba(255,255,255,0.2);
 }
 
 /* Status Bar */
 .status-bar {
     position: absolute;
-    top: 12px;
+    top: 14px;
     width: 100%;
-    padding: 0 25px;
+    padding: 0 28px;
     display: flex;
     justify-content: space-between;
     color: white;
@@ -104,14 +92,11 @@ body {
     font-weight: 600;
     z-index: 99;
     mix-blend-mode: difference;
+    pointer-events: none;
 }
-.status-icons {
-    display: flex;
-    gap: 6px;
-    font-size: 12px;
-}
+.status-icons { display: flex; gap: 6px; font-size: 12px; }
 
-/* Screens General */
+/* SCREENS MANAGEMENT */
 .app-screen {
     position: absolute;
     top: 0;
@@ -122,7 +107,7 @@ body {
     flex-direction: column;
     background: #000;
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(1.1);
     transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .app-screen.active {
@@ -131,326 +116,171 @@ body {
     transform: scale(1);
 }
 
-/* Loading Screen (Apple Logo) */
+/* Loading Screen */
 #loading-screen {
     background: #000;
     justify-content: center;
     align-items: center;
     color: white;
+    z-index: 1000;
 }
-.apple-logo {
-    font-size: 80px;
-    margin-bottom: 40px;
-}
-.loading-bar-container {
-    width: 200px;
-    height: 4px;
-    background: #333;
-    border-radius: 2px;
-    overflow: hidden;
-}
-.loading-bar {
-    height: 100%;
-    width: 0%;
-    background: #fff;
-    transition: width 0.2s;
-}
+.apple-logo { font-size: 80px; margin-bottom: 40px; color: white; }
+.loading-bar-container { width: 200px; height: 4px; background: #333; border-radius: 2px; overflow: hidden; }
+.loading-bar { height: 100%; width: 0%; background: #fff; transition: width 0.2s; }
 
 /* Home Screen */
 #home-screen .wallpaper {
     position: absolute;
     width: 100%;
     height: 100%;
-    background: linear-gradient(180deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); /* Cute gradient */
+    background: linear-gradient(180deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
     z-index: 0;
 }
-.home-content {
-    z-index: 1;
-    padding: 60px 20px 20px 20px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-.widgets {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 30px;
-}
+.home-content { z-index: 1; padding: 60px 20px 20px 20px; height: 100%; display: flex; flex-direction: column; }
+
+.widgets { display: flex; gap: 15px; margin-bottom: 30px; }
 .widget {
-    width: 150px;
-    height: 150px;
-    background: rgba(255,255,255,0.4);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 15px;
-    color: #333;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    width: 150px; height: 150px; background: rgba(255,255,255,0.4);
+    backdrop-filter: blur(10px); border-radius: 20px; padding: 15px;
+    color: #333; display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
     box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
 .calendar-widget .day { font-size: 14px; font-weight: 600; color: #ff4444; }
 .calendar-widget .date { font-size: 42px; font-weight: 300; }
 .weather-widget { font-size: 18px; gap: 5px; }
-.weather-widget i { font-size: 30px; color: #ffd700; }
 
 .app-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px 10px;
-    margin-top: 10px;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 20px 10px; margin-top: 10px;
 }
 .app-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    cursor: pointer;
-    transition: transform 0.1s;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 5px; cursor: pointer; transition: transform 0.1s;
 }
 .app-item:active { transform: scale(0.9); }
 
 .app-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 14px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-size: 28px;
-    position: relative;
+    width: 60px; height: 60px; border-radius: 14px;
+    display: flex; justify-content: center; align-items: center;
+    color: white; font-size: 28px; position: relative;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
-.app-name {
-    color: white;
-    font-size: 11px;
-    font-weight: 500;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-}
+.app-name { color: #333; font-size: 11px; font-weight: 600; text-shadow: 0 1px 2px rgba(255,255,255,0.5); }
 
-/* Icon Colors */
+/* App Icon Colors */
 .whatsapp-icon { background: #25D366; }
 .camera-icon { background: #d1d1d6; color: #1c1c1e; }
 .spotify-icon { background: #121212; color: #1DB954; }
 .game-icon { background: linear-gradient(45deg, #FF9500, #FF3B30); }
+.notification-badge {
+    position: absolute; top: -5px; right: -5px; background: #FF3B30;
+    color: white; width: 20px; height: 20px; border-radius: 50%;
+    font-size: 12px; display: flex; justify-content: center;
+    align-items: center; border: 2px solid white;
+}
+
+/* Dock */
+.dock-container {
+    margin-top: auto; position: relative; height: 90px; width: 100%;
+    display: flex; justify-content: center; align-items: center;
+}
+.dock-blur {
+    position: absolute; bottom: 10px; width: 100%; height: 80px;
+    background: rgba(255,255,255,0.3); backdrop-filter: blur(20px);
+    border-radius: 35px; z-index: 0;
+}
+.dock-apps { display: flex; gap: 15px; z-index: 1; margin-bottom: 5px; }
 .phone-icon { background: #34C759; }
 .safari-icon { background: #007AFF; }
 .message-icon { background: #34C759; }
 .music-icon { background: #FA2D48; }
 
-.notification-badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: #FF3B30;
-    color: white;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    font-size: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px solid white;
-}
-
-/* Dock */
-.dock-container {
-    margin-top: auto;
-    position: relative;
-    height: 90px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.dock-blur {
-    position: absolute;
-    bottom: 10px;
-    width: 100%;
-    height: 80px;
-    background: rgba(255,255,255,0.3);
-    backdrop-filter: blur(20px);
-    border-radius: 35px;
-    z-index: 0;
-}
-.dock-apps {
-    display: flex;
-    gap: 15px;
-    z-index: 1;
-    margin-bottom: 5px;
-}
-
-/* WhatsApp Interface */
+/* WhatsApp App */
 #whatsapp-app { background: #fff; color: #000; }
-.wa-view { 
-    width: 100%; height: 100%; display: none; flex-direction: column; 
-    animation: slideInRight 0.3s ease;
-}
+.wa-view { width: 100%; height: 100%; display: none; flex-direction: column; animation: slideIn 0.3s ease; }
 .wa-view.active { display: flex; }
+@keyframes slideIn { from { transform: translateX(50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-@keyframes slideInRight {
-    from { transform: translateX(100%); }
-    to { transform: translateX(0); }
-}
-
-.wa-header {
-    padding: 50px 15px 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #F5F5F5;
-    border-bottom: 1px solid #ddd;
-}
+.wa-header { padding: 55px 15px 10px; display: flex; justify-content: space-between; align-items: center; background: #F5F5F5; border-bottom: 1px solid #ddd; }
 .wa-title { font-size: 20px; font-weight: bold; }
-.edit-btn, .new-chat { color: #007AFF; font-size: 16px; }
-
-.wa-search-bar {
-    background: #e3e3e8;
-    margin: 10px 15px;
-    padding: 8px;
-    border-radius: 10px;
-    color: #888;
-    font-size: 14px;
-}
+.wa-search-bar { background: #e3e3e8; margin: 10px 15px; padding: 8px; border-radius: 10px; color: #888; font-size: 14px; }
 .wa-chat-list { flex: 1; overflow-y: auto; background: #fff; }
-.wa-chat-item {
-    display: flex;
-    padding: 10px 15px;
-    border-bottom: 1px solid #f0f0f0;
-    cursor: pointer;
-}
-.wa-avatar {
-    width: 50px; height: 50px; background: #ccc; border-radius: 50%;
-    display: flex; justify-content: center; align-items: center;
-    color: white; font-weight: bold; margin-right: 15px; overflow: hidden;
-}
-.wa-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.wa-chat-item { display: flex; padding: 10px 15px; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
+.wa-chat-item:active { background: #f5f5f5; }
+.wa-avatar { width: 50px; height: 50px; background: #ccc; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; margin-right: 15px; }
 .wa-chat-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
 .wa-top-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
 .wa-name { font-weight: bold; font-size: 16px; }
 .wa-time { color: #007AFF; font-size: 12px; }
-.wa-bottom-row { display: flex; justify-content: space-between; color: #888; font-size: 14px; }
-.wa-preview { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
-.wa-badge { background: #007AFF; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; }
-.wa-footer {
-    height: 60px; border-top: 1px solid #ddd; display: flex; justify-content: space-around; align-items: center;
-    background: #f9f9f9; padding-bottom: 10px;
-}
-.wa-nav-item { display: flex; flex-direction: column; align-items: center; color: #888; font-size: 10px; gap: 4px; }
-.wa-nav-item.active { color: #007AFF; }
-.wa-nav-item i { font-size: 20px; }
+.wa-preview { color: #888; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
 
 /* Chat Room */
-.wa-chat-header {
-    background: #f5f5f5; padding: 45px 10px 10px; display: flex; align-items: center; border-bottom: 1px solid #ddd;
-    z-index: 10;
-}
+.wa-chat-header { background: #f5f5f5; padding: 45px 10px 10px; display: flex; align-items: center; border-bottom: 1px solid #ddd; z-index: 10; }
 .back-chevron { color: #007AFF; display: flex; align-items: center; gap: 5px; cursor: pointer; font-size: 16px; }
-.wa-header-profile { flex: 1; display: flex; align-items: center; margin-left: 10px; }
-.wa-avatar-small { width: 35px; height: 35px; background: #ccc; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; margin-right: 10px; }
-.wa-header-name { font-weight: bold; font-size: 14px; }
-.wa-header-status { font-size: 10px; color: #888; }
-.wa-header-actions { color: #007AFF; display: flex; gap: 20px; font-size: 18px; margin-right: 10px; }
-
-.wa-chat-bg {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
-    background-color: #E5DDD5; opacity: 0.5; z-index: 0;
-}
-.wa-messages-container {
-    flex: 1; z-index: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px;
-}
-.msg-bubble {
-    max-width: 80%; padding: 8px 12px; border-radius: 10px; font-size: 14px; line-height: 1.4; position: relative;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-}
+.wa-messages-container { flex: 1; background: #E5DDD5; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+.msg-bubble { max-width: 80%; padding: 8px 12px; border-radius: 10px; font-size: 14px; line-height: 1.4; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
 .msg-in { background: #fff; align-self: flex-start; border-top-left-radius: 0; }
-.msg-out { background: #DCF8C6; align-self: flex-end; border-top-right-radius: 0; }
 .msg-time { font-size: 10px; color: #999; text-align: right; margin-top: 4px; display: block; }
-
-.wa-input-area {
-    background: #f0f0f0; padding: 10px; display: flex; align-items: center; gap: 10px; z-index: 10;
-    padding-bottom: 25px; /* Space for home bar */
-}
-.wa-input-area i { color: #007AFF; font-size: 20px; }
+.wa-input-area { background: #f0f0f0; padding: 10px; display: flex; align-items: center; gap: 10px; padding-bottom: 30px; }
 .wa-input-field { flex: 1; height: 35px; background: white; border-radius: 18px; border: 1px solid #ddd; }
 
 /* Camera App */
 #camera-app { background: #000; color: white; }
 .camera-interface { display: flex; flex-direction: column; height: 100%; }
-.camera-top-controls { padding: 50px 20px 10px; display: flex; justify-content: space-between; align-items: center; font-size: 20px; }
+.camera-top-controls { padding: 50px 20px 10px; display: flex; justify-content: space-between; align-items: center; }
 .camera-viewport { flex: 1; background: #1a1a1a; position: relative; overflow: hidden; margin: 10px 0; border-radius: 20px; }
 .photo-display { width: 100%; height: 100%; overflow-y: auto; display: flex; flex-direction: column; align-items: center; padding: 10px; }
 .camera-bottom-controls { height: 150px; background: #000; display: flex; flex-direction: column; justify-content: center; padding-bottom: 20px; }
-.camera-modes { display: flex; justify-content: center; gap: 20px; font-size: 12px; font-weight: bold; color: #666; margin-bottom: 20px; }
-.camera-modes span.active { color: #ffd700; }
-.shutter-area { display: flex; justify-content: space-around; align-items: center; }
-.shutter-btn { width: 70px; height: 70px; border-radius: 50%; border: 4px solid white; padding: 4px; cursor: pointer; }
+.shutter-btn { width: 70px; height: 70px; border-radius: 50%; border: 4px solid white; padding: 4px; margin: 0 auto; cursor: pointer; }
 .shutter-inner { width: 100%; height: 100%; background: white; border-radius: 50%; transition: transform 0.1s; }
 .shutter-btn:active .shutter-inner { transform: scale(0.9); background: #ccc; }
-.gallery-preview { width: 40px; height: 40px; background: #333; border-radius: 6px; }
 
-/* Photo Strip in Camera */
-.photo-strip { background: white; padding: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); margin-top: 10px; animation: slideUp 0.5s ease; }
-@keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-.photo-frame { margin-bottom: 10px; border: 2px solid #000; background: #eee; width: 100%; aspect-ratio: 4/5; overflow: hidden; position: relative; }
+.photo-frame { margin-bottom: 10px; border: 4px solid white; background: #eee; width: 100%; aspect-ratio: 4/5; overflow: hidden; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.5); animation: slideUp 0.5s ease; }
+@keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
-.strip-footer { color: black; text-align: center; font-family: 'Courier New', monospace; font-weight: bold; font-size: 12px; margin-top: 5px; }
-.photo-overlay-text { position: absolute; bottom: 0; background: rgba(0,0,0,0.6); color: white; width: 100%; font-size: 10px; padding: 5px; text-align: center; }
+.photo-overlay-text { position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.6); color: white; padding: 8px; font-size: 12px; text-align: center; }
 
 /* Spotify App */
 #spotify-app { background: #121212; color: white; text-align: center; }
-.spotify-bg-gradient { position: absolute; top: 0; width: 100%; height: 60%; background: linear-gradient(to bottom, #4a4a4a, #121212); z-index: 0; opacity: 0.5; }
-.spotify-header { position: relative; z-index: 2; padding: 50px 20px 10px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: bold; }
-.spotify-content { position: relative; z-index: 2; padding: 20px; flex: 1; display: flex; flex-direction: column; }
-.spotify-album-art { width: 100%; aspect-ratio: 1; margin: 20px 0; position: relative; display: flex; justify-content: center; }
-.album-cover { width: 90%; height: 90%; background: #282828; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 60px; color: #1DB954; }
-.spotify-track-info { text-align: left; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+.spotify-header { padding: 50px 20px 10px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
+.spotify-content { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+.album-cover { width: 90%; aspect-ratio: 1; background: #282828; margin: 20px auto; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 60px; color: #1DB954; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.spotify-track-info { text-align: left; margin-bottom: 20px; }
 .track-title { font-size: 22px; margin-bottom: 5px; }
-.artist-name { color: #b3b3b3; font-size: 16px; }
-.spotify-progress { width: 100%; margin-bottom: 20px; }
-.progress-bar-bg { width: 100%; height: 4px; background: #535353; border-radius: 2px; }
-.prog-fill { width: 30%; height: 100%; background: white; border-radius: 2px; position: relative; }
-.prog-fill::after { content: ''; position: absolute; right: -4px; top: -3px; width: 10px; height: 10px; background: white; border-radius: 50%; }
-.time-stamps { display: flex; justify-content: space-between; color: #b3b3b3; font-size: 10px; margin-top: 5px; }
-.spotify-controls { display: flex; justify-content: space-between; align-items: center; font-size: 24px; margin-bottom: 30px; }
-.play-pause-btn { width: 60px; height: 60px; background: white; color: black; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; }
-.playlist-selector { margin-top: auto; text-align: left; }
-.playlist-chips { display: flex; gap: 10px; margin-top: 10px; overflow-x: auto; padding-bottom: 10px; }
-.chip { background: #282828; padding: 8px 16px; border-radius: 20px; font-size: 12px; white-space: nowrap; cursor: pointer; border: 1px solid transparent; }
+.artist-name { color: #b3b3b3; }
+.spotify-controls { display: flex; justify-content: space-between; align-items: center; font-size: 24px; margin: 30px 0; }
+.play-pause-btn { width: 60px; height: 60px; background: white; color: black; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.playlist-chips { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; }
+.chip { background: #282828; padding: 8px 16px; border-radius: 20px; font-size: 12px; white-space: nowrap; cursor: pointer; }
 .chip.active { background: #1DB954; color: black; }
 
 /* Tetris App */
 #tetris-app { background: #000; }
 .tetris-overlay-header { position: absolute; top: 50px; width: 100%; display: flex; justify-content: center; gap: 20px; z-index: 10; }
-.score-pill, .level-pill { background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 15px; color: white; font-size: 14px; backdrop-filter: blur(5px); }
+.score-pill { background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 15px; color: white; backdrop-filter: blur(5px); }
 .tetris-game-container { flex: 1; display: flex; justify-content: center; align-items: center; padding-top: 60px; }
-#tetris-canvas { border: 1px solid #333; box-shadow: 0 0 20px rgba(255,255,255,0.1); }
-.tetris-touch-controls { height: 180px; padding: 20px; padding-bottom: 40px; display: flex; gap: 20px; }
+#tetris-canvas { border: 2px solid #333; box-shadow: 0 0 20px rgba(255,255,255,0.1); background: #111; }
+.tetris-touch-controls { height: 180px; padding: 20px; display: flex; gap: 20px; padding-bottom: 40px; }
 .dpad-area { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: 10px; }
-.t-btn { background: rgba(255,255,255,0.15); border: none; border-radius: 50%; color: white; font-size: 20px; cursor: pointer; backdrop-filter: blur(5px); }
-.t-btn:active { background: rgba(255,255,255,0.3); }
+.t-btn { background: rgba(255,255,255,0.2); border: none; border-radius: 50%; color: white; font-size: 20px; cursor: pointer; backdrop-filter: blur(5px); }
+.t-btn:active { background: rgba(255,255,255,0.4); }
 .t-left { grid-column: 1; grid-row: 2; }
 .t-down { grid-column: 2; grid-row: 2; }
 .t-right { grid-column: 3; grid-row: 2; }
-.action-area { width: 80px; display: flex; justify-content: center; align-items: flex-end; padding-bottom: 10px; }
-.t-rotate { width: 70px; height: 70px; background: #ff4444; font-size: 24px; }
+.t-rotate { width: 70px; height: 70px; background: #ff4444; font-size: 24px; border-radius: 50%; border: none; color: white; }
 
 /* Home Indicator */
 .home-indicator-area { position: absolute; bottom: 0; width: 100%; height: 30px; z-index: 999; display: flex; justify-content: center; cursor: pointer; }
 .home-indicator { width: 130px; height: 5px; background: white; border-radius: 3px; margin-top: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
 
-/* Modals (iOS Alert Style) */
+/* Modals */
 .ios-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px); z-index: 2000; display: none; justify-content: center; align-items: center; }
 .ios-modal.active { display: flex; animation: popIn 0.2s ease; }
 @keyframes popIn { from { transform: scale(1.1); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-.ios-alert { background: rgba(255,255,255,0.9); width: 270px; border-radius: 14px; text-align: center; backdrop-filter: blur(20px); overflow: hidden; }
-.ios-alert h3 { padding: 20px 20px 10px; font-size: 17px; font-weight: 600; }
-.ios-alert p { padding: 0 20px 20px; font-size: 13px; color: #000; line-height: 1.4; }
+.ios-alert { background: rgba(255,255,255,0.9); width: 270px; border-radius: 14px; text-align: center; backdrop-filter: blur(20px); overflow: hidden; padding-top: 20px; }
+.ios-alert h3 { margin-bottom: 10px; font-size: 17px; }
+.ios-alert p { padding: 0 15px 15px; font-size: 13px; line-height: 1.4; }
 .ios-alert-btns { border-top: 1px solid rgba(0,0,0,0.2); display: flex; }
 .ios-alert-btns button { flex: 1; background: transparent; border: none; padding: 15px; font-size: 17px; color: #007AFF; font-weight: 600; cursor: pointer; }
 .ios-alert-btns button:active { background: rgba(0,0,0,0.05); }
-.heart-alert .message-text p { margin-bottom: 5px; }
