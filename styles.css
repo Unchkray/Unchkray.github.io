@@ -173,3 +173,32 @@ body { background: #121212; display: flex; justify-content: center; align-items:
 .ios-alert-btns button:active { background: rgba(0,0,0,0.05); }
 .message-content-centered { text-align: center !important; padding: 0 20px 20px; }
 .message-content-centered p { margin: 5px 0 !important; padding: 0 !important; line-height: 1.2 !important; }
+
+/* --- TAMBAHAN DARURAT AGAR BISA DIKLIK --- */
+
+/* Pastikan layar yang tidak aktif benar-benar hilang interaksinya */
+.app-screen:not(.active) {
+    pointer-events: none !important;
+    visibility: hidden !important;
+    z-index: -999 !important;
+}
+
+/* Pastikan Loading Screen hilang setelah selesai */
+#loading-screen:not(.active) {
+    display: none !important;
+}
+
+/* Paksa tombol home dan dock berada di paling atas */
+.dock-container, .home-indicator-area {
+    z-index: 9999 !important;
+    pointer-events: auto !important;
+}
+
+/* Paksa Grid Aplikasi bisa diklik */
+.app-grid {
+    z-index: 10 !important;
+    position: relative;
+}
+.app-item {
+    pointer-events: auto !important;
+}
