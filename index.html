@@ -48,10 +48,22 @@
                 </div>
 
                 <div class="menu-buttons">
-                    <button class="menu-btn message-btn" data-page="message">MESSAGE</button>
-                    <button class="menu-btn gallery-btn" data-page="gallery">GALLERY</button>
-                    <button class="menu-btn music-btn" data-page="music">MUSIC</button>
-                    <button class="menu-btn tetris-btn" data-page="tetris">TETRIS</button>
+                    <button class="menu-btn message-btn" data-page="message">
+                        <div class="app-icon">💬</div>
+                        <div class="app-label">WhatsApp</div>
+                    </button>
+                    <button class="menu-btn gallery-btn" data-page="gallery">
+                        <div class="app-icon">📷</div>
+                        <div class="app-label">Camera</div>
+                    </button>
+                    <button class="menu-btn music-btn" data-page="music">
+                        <div class="app-icon">🎵</div>
+                        <div class="app-label">Spotify</div>
+                    </button>
+                    <button class="menu-btn tetris-btn" data-page="tetris">
+                        <div class="app-icon">🧩</div>
+                        <div class="app-label">Tetris</div>
+                    </button>
                 </div>
 
                 <div class="controls">
@@ -78,11 +90,25 @@
             </div>
         </div>
 
-        <!-- Message Screen -->
+        <!-- Message Screen (WhatsApp) -->
         <div id="message-screen" class="screen">
             <div class="page-container">
                 <div class="page-screen">
-                        <!-- Content will be populated by JavaScript -->
+                    <div class="whatsapp-header">
+                        <div class="whatsapp-logo">WhatsApp</div>
+                        <div class="whatsapp-status">Online</div>
+                    </div>
+                    <div class="chat-list">
+                        <div class="chat-item" id="unchkray-chat">
+                            <div class="chat-avatar">U</div>
+                            <div class="chat-info">
+                                <div class="chat-name">Unchkray</div>
+                                <div class="chat-preview">Tap to read message...</div>
+                            </div>
+                            <div class="chat-time">Now</div>
+                        </div>
+                        <!-- Add more chats if needed -->
+                    </div>
                 </div>
                 <div class="page-controls">
                     <button class="page-btn back-btn" data-page="main">KEMBALI</button>
@@ -91,11 +117,11 @@
             </div>
         </div>
 
-        <!-- Gallery Screen -->
+        <!-- Gallery Screen (Camera) -->
         <div id="gallery-screen" class="screen">
             <div class="page-container">
                 <div class="page-screen">
-                    <div class="page-header">Gallery</div>
+                    <div class="page-header">Camera</div>
                     <div class="gallery-content">
                         <!-- Content will be populated by JavaScript -->
                     </div>
@@ -107,11 +133,11 @@
             </div>
         </div>
 
-        <!-- Music Screen -->
+        <!-- Music Screen (Spotify) -->
         <div id="music-screen" class="screen">
             <div class="page-container">
                 <div class="page-screen">
-                    <div class="page-header">Music Player</div>
+                    <div class="page-header">Spotify</div>
                     <div class="music-content">
                         <!-- Content will be populated by JavaScript -->
                     </div>
@@ -177,4 +203,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
