@@ -14,13 +14,13 @@ let cameraPhotoTimeout = null;
 
 // --- Data Foto (Pastikan file ada di folder images) ---
 const photos = [
-    { text: 'Kecantikan yang Gak Pernah Gagal 💕', image: './images/photo1.jpg' },
+    { text: 'Cantiknya Kebangetan 💕', image: './images/photo1.jpg' },
     { text: 'Imutnya Bikin Lupa Dunia 🧸', image: './images/photo2.jpg' },
-    { text: 'Elegan Tanpa Usaha ✨', image: './images/photo3.jpg' },
+    { text: 'Elegan ✨', image: './images/photo3.jpg' },
     { text: 'Senyum yang Jadi Favorit Aku ❤️', image: './images/photo4.jpg' },
     { text: 'Pesona yang Susah Dilupain 🌹', image: './images/photo5.jpg' },
     { text: 'Cantik dari Sudut Mana Pun 📸', image: './images/photo6.jpg' },
-    { text: 'Momen Manis Tanpa Kata 🍯', image: './images/photo7.jpg' },
+    { text: 'Manis Bikin Diabetes 🍯', image: './images/photo7.jpg' },
     { text: 'Yang Aku Sayang Selamanya 💖', image: './images/photo8.jpg' }
 ];
 
