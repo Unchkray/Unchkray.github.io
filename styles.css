@@ -2,7 +2,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
 body { background: #121212; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Inter', sans-serif; overflow: hidden; }
 
-/* CHASSIS */
+/* IPHONE CHASSIS */
 .iphone-body { width: 380px; height: 780px; background: linear-gradient(145deg, #d2c4b5, #bfae9e); border-radius: 55px; position: relative; box-shadow: 0 0 0 2px #a8998d, 0 0 0 4px #4a4a4a, 0 30px 60px rgba(0,0,0,0.6); padding: 14px; z-index: 1; }
 .screen-content-wrapper { width: 100%; height: 100%; background: #000; border-radius: 44px; position: relative; overflow: hidden; mask-image: radial-gradient(white, black); -webkit-mask-image: -webkit-radial-gradient(white, black); }
 .side-btn { position: absolute; background: #9c8c7e; left: -4px; z-index: 0; }
@@ -21,7 +21,7 @@ body { background: #121212; display: flex; justify-content: center; align-items:
 .app-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; background: #000; opacity: 0; transform: scale(1.1); transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .app-screen.active { display: flex; opacity: 1; transform: scale(1); }
 
-/* Loading & Home */
+/* Home & Loading */
 #loading-screen { background: #000; justify-content: center; align-items: center; color: white; z-index: 1000; }
 .apple-logo { font-size: 80px; margin-bottom: 40px; color: white; }
 .loading-bar-container { width: 200px; height: 4px; background: #333; border-radius: 2px; overflow: hidden; }
