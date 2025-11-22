@@ -9,23 +9,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
-    <div id="gift-intro">
-        <div class="gift-container" onclick="openGift()">
-            <div class="gift-lid">
-                <div class="gift-bow"></div>
+	<div id="gift-intro">
+        <div class="gift-content">
+            <div class="gift-box-container" onclick="openGift()">
+                <div class="gift-lid">
+                    <div class="gift-bow-left"></div>
+                    <div class="gift-bow-right"></div>
+                    <div class="gift-ribbon-lid"></div>
+                </div>
+                <div class="gift-body">
+                    <div class="gift-ribbon-body"></div>
+                </div>
             </div>
-            <div class="gift-box">
-                <div class="gift-ribbon-vertical"></div>
-                <div class="gift-ribbon-horizontal"></div>
+            <div class="gift-text-group">
+                <h1 class="gift-title">BIRTHDAY GIFT</h1>
+                <p class="gift-hint">Tap the box to open 🎁</p>
             </div>
-        </div>
-        <div class="gift-text">
-            <h1>BIRTHDAY GIFT</h1>
-            <p>Tap to Open 🎁</p>
         </div>
     </div>
-
+    
     <div class="iphone-container">
         <div class="iphone-body">
             <div class="side-btn volume-up"></div>
@@ -73,8 +75,14 @@
                         <div class="wa-chat-list">
                             <div class="wa-chat-item" onclick="openChatRoom()">
                                 <div class="wa-avatar" style="background:#FF2D55">U</div>
-                                <div class="wa-info-mid"><div class="wa-name">Unchkray ❤️</div><div class="wa-preview">Happy Birthday yang ke-26...</div></div>
-                                <div class="wa-info-right"><span class="wa-time">Now</span><div class="wa-badge-blue">6</div></div>
+                                <div class="wa-info-mid">
+                                    <div class="wa-name">Unchkray ❤️</div>
+                                    <div class="wa-preview">Happy Birthday yang ke-26...</div>
+                                </div>
+                                <div class="wa-info-right">
+                                    <span class="wa-time">Now</span>
+                                    <div class="wa-badge-blue">6</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -92,31 +100,53 @@
                 <div id="camera-app" class="app-screen">
                     <div class="camera-interface" id="camera-view-mode">
                         <div class="camera-top-controls"><i class="fas fa-bolt"></i><i class="fas fa-chevron-up"></i><i class="fas fa-circle-notch"></i></div>
+                        
                         <div class="camera-viewport">
                             <div id="camera-flash" class="camera-flash"></div>
-                            <div id="camera-main-display" class="camera-main-display"><div class="initial-text">Tap Shutter to Capture</div></div>
+                            <div id="camera-main-display" class="camera-main-display">
+                                <div class="initial-text">Tap Shutter to Capture</div>
+                            </div>
                         </div>
+
                         <div class="camera-bottom-controls">
                             <div class="camera-modes"><span>VIDEO</span><span style="color:#ffd700">PHOTO</span><span>PORTRAIT</span></div>
                             <div class="shutter-area">
-                                <div class="gallery-preview-btn" onclick="openGalleryOverlay()"><img id="gallery-thumb" src="" style="opacity:0;"></div>
-                                <div class="shutter-btn" id="shutter-trigger" onclick="takePhoto()"><div class="shutter-inner"></div></div>
+                                <div class="gallery-preview-btn" onclick="openGalleryOverlay()">
+                                    <img id="gallery-thumb" src="" style="opacity:0;">
+                                </div>
+                                <div class="shutter-btn" id="shutter-trigger" onclick="takePhoto()">
+                                    <div class="shutter-inner"></div>
+                                </div>
                                 <div class="camera-flip-btn"><i class="fas fa-sync-alt"></i></div>
                             </div>
                         </div>
                     </div>
+
                     <div id="gallery-overlay" class="gallery-overlay">
-                        <div class="gallery-navbar"><div class="back-text" onclick="closeGalleryOverlay()"><i class="fas fa-chevron-left"></i> Camera</div><div class="gallery-date">Today</div><div class="gallery-action">Edit</div></div>
-                        <div class="gallery-full-image-container"><img id="gallery-full-img" src="" alt="No Photo"></div>
-                        <div class="gallery-bottom-bar"><i class="fas fa-share-square"></i><i class="far fa-heart"></i><i class="fas fa-trash"></i></div>
+                        <div class="gallery-navbar">
+                            <div class="back-text" onclick="closeGalleryOverlay()"><i class="fas fa-chevron-left"></i> Camera</div>
+                            <div class="gallery-date">Today</div>
+                            <div class="gallery-action">Edit</div>
+                        </div>
+                        <div class="gallery-full-image-container">
+                            <img id="gallery-full-img" src="" alt="No Photo">
+                        </div>
+                        <div class="gallery-bottom-bar">
+                            <i class="fas fa-share-square"></i>
+                            <i class="far fa-heart"></i>
+                            <i class="fas fa-trash"></i>
+                        </div>
                     </div>
                 </div>
 
                 <div id="spotify-app" class="app-screen">
                     <audio id="audio-player"></audio>
+
                     <div id="spotify-library-view" class="spotify-view active">
                         <div class="spotify-lib-header">
-                            <div class="user-profile">M</div><span class="lib-title">Your Library</span><div class="lib-icons"><i class="fas fa-search"></i><i class="fas fa-plus"></i></div>
+                            <div class="user-profile">M</div>
+                            <span class="lib-title">Your Library</span>
+                            <div class="lib-icons"><i class="fas fa-search"></i><i class="fas fa-plus"></i></div>
                         </div>
                         <div class="filter-pills"><span>Playlists</span><span>Albums</span><span>Artists</span></div>
                         <div class="spotify-list-container" id="spotify-playlist-list"></div>
@@ -125,10 +155,18 @@
                             <div class="np-controls"><i class="fas fa-play" id="np-play-btn-mini"></i></div>
                         </div>
                     </div>
+
                     <div id="spotify-playlist-view" class="spotify-view">
                         <div class="playlist-back-header"><i class="fas fa-arrow-left" onclick="closePlaylist()"></i></div>
-                        <div class="playlist-cover-area"><div class="big-cover-art" id="pl-cover-art"></div><h1 id="pl-title">Playlist Name</h1><p id="pl-desc">Description</p></div>
-                        <div class="playlist-actions"><div class="pl-left-icons"><i class="far fa-heart"></i><i class="fas fa-arrow-circle-down"></i></div><div class="pl-play-btn" id="pl-play-big"><i class="fas fa-play"></i></div></div>
+                        <div class="playlist-cover-area">
+                            <div class="big-cover-art" id="pl-cover-art"></div>
+                            <h1 id="pl-title">Playlist Name</h1>
+                            <p id="pl-desc">Description</p>
+                        </div>
+                        <div class="playlist-actions">
+                            <div class="pl-left-icons"><i class="far fa-heart"></i><i class="fas fa-arrow-circle-down"></i></div>
+                            <div class="pl-play-btn" id="pl-play-big"><i class="fas fa-play"></i></div>
+                        </div>
                         <div class="song-list-container" id="pl-song-list"></div>
                     </div>
                 </div>
@@ -150,7 +188,8 @@
 
                 <div id="game-over-modal" class="ios-modal">
                     <div class="ios-alert">
-                        <h3>GAME OVER</h3><p>Skor kamu: <span id="final-score">0</span></p>
+                        <h3>GAME OVER</h3>
+                        <p>Skor kamu: <span id="final-score">0</span></p>
                         <div class="ios-alert-btns"><button onclick="closeModal('game-over-modal'); openModal('final-message-modal')">OK</button></div>
                     </div>
                 </div>
@@ -158,7 +197,10 @@
                     <div class="ios-alert">
                         <h3>INGET YAA! ❤️</h3>
                         <div class="message-content-centered">
-                            <p>walaupun kamu kalah,</p><p>tapi kamu selalu menang</p><p>kok di hati aku, HEHE</p><p>^_^</p>
+                            <p>walaupun kamu kalah,</p>
+                            <p>tapi kamu selalu menang</p>
+                            <p>kok di hati aku, HEHE</p>
+                            <p>^_^</p>
                             <p style="margin-top:10px; color:#FF2D55; font-weight:bold;">I LOVE YOU ❤️</p>
                         </div>
                         <div class="ios-alert-btns"><button onclick="closeModal('final-message-modal'); goHome()">Love You Too</button></div>
